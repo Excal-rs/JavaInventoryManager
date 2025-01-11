@@ -10,9 +10,9 @@ import java.io.IOException;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("signUp.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("logIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(MainApplication.class.getResource("signUp.css").toExternalForm());
+        scene.getStylesheets().add(MainApplication.class.getResource("signup_login.css").toExternalForm());
 
         stage.setMinHeight(700);
         stage.setMinWidth(1000);

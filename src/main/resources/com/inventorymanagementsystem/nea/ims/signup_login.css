@@ -1,0 +1,59 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-background-color: #383896
+}
+
+#backdrop {
+    -fx-fill: #FAFAFA;
+    -fx-stroke-width: 0;
+
+}
+#titleLbl {
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
+
+#errorLbl {
+    -fx-text-fill: red;
+}
+
+Button, TextField, PasswordField  {
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#signupBtn {
+    -fx-background-color: #383896;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+    -fx-border-width: 0;
+}
+
+#loginBtn {
+    -fx-text-fill: #383896;
+    -fx-font-weight: bold;
+
+    -fx-border-color: #383896;
+    -fx-border-width: 2;
+
+    -fx-background-color: transparent;
+}
+
+Button:hover {
+    -fx-cursor: hand;
+    -fx-opacity: 0.8;
+}
+
+#signupBtn:pressed {
+    -fx-background-color: transparent;
+    -fx-text-fill: #383896;
+    -fx-border-color: #383896;
+    -fx-border-width: 2;
+}
+
+#loginBtn:pressed {
+        -fx-background-color: #383896;
+        -fx-text-fill: white;
+        -fx-border-width: 0;
+}

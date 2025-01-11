@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventorymanagementsystem.nea.ims.SignUpController">
    <children>
-      <Rectangle fx:id="backdrop" arcHeight="50.0" arcWidth="50.0" fill="DODGERBLUE" height="482.0" layoutX="278.0" layoutY="109.0" stroke="BLACK" strokeType="INSIDE" width="442.0" />
+      <Rectangle fx:id="backdrop" arcHeight="50.0" arcWidth="50.0" height="482.0" layoutX="278.0" layoutY="109.0" stroke="BLACK" strokeType="INSIDE" width="442.0" />
       <Label fx:id="titleLbl" alignment="BOTTOM_CENTER" layoutX="278.0" layoutY="171.0" prefHeight="18.0" prefWidth="442.0" text="Sign Up" />
       <TextField fx:id="userField" layoutX="400.0" layoutY="263.0" prefHeight="36.0" prefWidth="202.0" />
       <PasswordField fx:id="passField" layoutX="400.0" layoutY="327.0" prefHeight="36.0" prefWidth="202.0" />
