@@ -47,4 +47,17 @@ public class Validator {
 
         return true;
     }
+
+    public static boolean general(String string){
+        if (string.length() > 250){
+            throw new IllegalArgumentException("Description too long! Max 250 characters.");
+        }
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9!@#$%^&*_+=,.?/()-].+$");
+        Matcher matcher = pattern.matcher(string);
+        if(!matcher.matches()){
+            throw new IllegalArgumentException("No Illegal characters!");
+        }
+
+        return true;
+    }
 }
