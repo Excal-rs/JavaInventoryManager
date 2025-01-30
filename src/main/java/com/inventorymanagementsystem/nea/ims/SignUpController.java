@@ -22,13 +22,17 @@ public class SignUpController extends DefaultController {
     @FXML
     private Button loginBtn;
 
-    private void login(ActionEvent event){
+    public void switchToLogin(ActionEvent event){
         try {
-            switchToScene(event, "login.fxml");
+            switchToScene(event, "login.fxml", new String[]{"styles/signup_login.css"},"IMS - log in" );
         } catch (IOException e) {
             System.out.println("Change scene caused error");
             // TODO: when errorPopup is created, add one here
         }
+    }
+
+    public void signup(ActionEvent event){
+        System.out.println("Signup button pressed");
     }
 
 }

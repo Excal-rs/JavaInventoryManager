@@ -12,7 +12,7 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("signup.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(MainApplication.class.getResource("signup_login.css").toExternalForm());
+        scene.getStylesheets().add(MainApplication.class.getResource("styles/signup_login.css").toExternalForm());
 
         stage.setMinHeight(700);
         stage.setMinWidth(1000);
