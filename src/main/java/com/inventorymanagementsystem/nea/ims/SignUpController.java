@@ -7,8 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 
-public class SignUpController extends defaultController {
+
+public class SignUpController extends DefaultController {
     @FXML
     private Label errorLbl;
     @FXML
@@ -21,7 +23,12 @@ public class SignUpController extends defaultController {
     private Button loginBtn;
 
     private void login(ActionEvent event){
-
+        try {
+            switchToScene(event, "login.fxml");
+        } catch (IOException e) {
+            System.out.println("Change scene caused error");
+            // TODO: when errorPopup is created, add one here
+        }
     }
 
 }
