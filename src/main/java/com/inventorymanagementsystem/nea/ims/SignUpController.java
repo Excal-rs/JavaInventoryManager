@@ -18,9 +18,12 @@ public class SignUpController extends DefaultController {
     @FXML
     private PasswordField passField;
     @FXML
+    private PasswordField cPassField;
+    @FXML
     private Button signupBtn;
     @FXML
     private Button loginBtn;
+
 
     public void switchToLogin(ActionEvent event){
         try {
@@ -32,7 +35,25 @@ public class SignUpController extends DefaultController {
     }
 
     public void signup(ActionEvent event){
-        System.out.println("Signup button pressed");
+        try {
+            String username = userField.getText();
+            String password = passField.getText();
+            String confPassword = cPassField.getText();
+
+            if (Validator.username(username) && Validator.password(password)) {
+                if (!password.equals(confPassword)){
+                    throw new IllegalArgumentException("Passwords do not match!");
+                }
+                createAccount(username, password);
+                successPopup("Sign Up Successful!", "You can now login!");
+            }
+        } catch (IllegalArgumentException e){
+          errorLbl.setText(e.getMessage());
+        }
+    }
+
+    private void createAccount(String username, String password) {
+        System.out.println("Account Created with username: " + username);
     }
 
 }
