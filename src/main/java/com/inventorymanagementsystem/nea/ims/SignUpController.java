@@ -8,6 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.sql.*;
 
 
 public class SignUpController extends DefaultController {
@@ -52,8 +53,20 @@ public class SignUpController extends DefaultController {
         }
     }
 
-    private void createAccount(String username, String password) {
-        System.out.println("Account Created with username: " + username);
+    private void createAccount(String username, String password) throws SQLException {
+        String url = "jdbc:sqlite:/SQLdb/IMS_database";
+        Connection connection = DriverManager.getConnection(url);
+        PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
+        getStatement.setString(1, username);
+        ResultSet results = getStatement.executeQuery();
+
+        if (results.next() && results.getInt(1) != 0){
+            errorLbl.setText("Sorry, username already taken!");
+            return;
+        }
+
+        PreparedStatement insertStatement =connection.prepareStatement("INSERT ")
+
     }
 
 }
