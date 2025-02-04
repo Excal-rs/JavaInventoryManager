@@ -8,6 +8,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 
@@ -16,6 +19,8 @@ public class SignUpController extends DefaultController {
     private Label errorLbl;
     @FXML
     private TextField userField;
+    @FXML
+    private TextField nameField;
     @FXML
     private PasswordField passField;
     @FXML
@@ -38,14 +43,15 @@ public class SignUpController extends DefaultController {
     public void signup(ActionEvent event){
         try {
             String username = userField.getText();
+            String name = nameField.getText();
             String password = passField.getText();
             String confPassword = cPassField.getText();
 
-            if (Validator.username(username) && Validator.password(password)) {
+            if (Validator.username(username) && Validator.password(password) && Validator.username(name)) {
                 if (!password.equals(confPassword)){
                     throw new IllegalArgumentException("Passwords do not match!");
                 }
-                createAccount(username, password);
+                createAccount(username,name,password);
                 successPopup("Sign Up Successful!", "You can now login!");
             }
         } catch (IllegalArgumentException e){
@@ -53,22 +59,36 @@ public class SignUpController extends DefaultController {
         }
     }
 
-    private void createAccount(String username, String password) throws SQLException {
-        String url = "jdbc:sqlite:/SQLdb/IMS_database";
-        Connection connection = DriverManager.getConnection(url);
-        PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
-        getStatement.setString(1, username);
-        ResultSet results = getStatement.executeQuery();
+    private void createAccount(String username, String name,String password) {
+        try {
+            String url = "jdbc:sqlite:/SQLdb/IMS_database";
+            Connection connection = DriverManager.getConnection(url);
+            // Sets up SQL connection
 
-        if (results.next() && results.getInt(1) != 0){
-            errorLbl.setText("Sorry, username already taken!");
-            return;
+            PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
+            getStatement.setString(1, username);
+            ResultSet results = getStatement.executeQuery();
+            // Performs query
+
+            if (results.next() && results.getInt(1) != 0) {
+                errorLbl.setText("Sorry, username already taken!");
+                return;
+            }
+
+            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            // Hashes password
+
+            insertStatement.setString(1, username);
+            insertStatement.setString(2, name);
+            insertStatement.setBytes(3, hash);
+            insertStatement.executeUpdate();
+            // Sets parameters of prepared statement and runs it
+
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-
-        PreparedStatement insertStatement =connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
-        insertStatement.setString(1, username);
-        insertStatement.setString(2, name); // TODO: add name field
-        insertStatementsert.setString(3, SHA256(password))
     }
 
 }
