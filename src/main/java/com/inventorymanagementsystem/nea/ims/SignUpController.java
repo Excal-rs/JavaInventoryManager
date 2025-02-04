@@ -65,8 +65,10 @@ public class SignUpController extends DefaultController {
             return;
         }
 
-        PreparedStatement insertStatement =connection.prepareStatement("INSERT ")
-
+        PreparedStatement insertStatement =connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
+        insertStatement.setString(1, username);
+        insertStatement.setString(2, name); // TODO: add name field
+        insertStatementsert.setString(3, SHA256(password))
     }
 
 }

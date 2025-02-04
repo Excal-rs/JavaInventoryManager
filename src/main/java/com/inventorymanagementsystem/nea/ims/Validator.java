@@ -46,6 +46,7 @@ public class Validator {
         }
 
         return true;
+        // TODO: implement better error handling, using `Boolean.parseBoolean` + remove some sus chars
     }
 
     public static boolean general(String string){
