@@ -59,9 +59,9 @@ public class SignUpController extends DefaultController {
         }
     }
 
-    private void createAccount(String username, String name,String password) {
+    public void createAccount(String username, String name, String password) {
         try {
-            String url = "jdbc:sqlite:/SQLdb/IMS_database";
+            String url = "jdbc:sqlite:C:\\Users\\s230379\\OneDrive - Greenhead College\\Documents\\GitHub\\InventoryManagementSystem\\Source_code\\src\\main\\resources\\com\\inventorymanagementsystem\\nea\\ims\\SQLdb\\IMS_database";
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
 
