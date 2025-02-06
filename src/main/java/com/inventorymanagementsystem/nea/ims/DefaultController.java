@@ -39,8 +39,8 @@ public class DefaultController {
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(loader.load());
         if (cssFiles.length != 0) {
-            for (String cssfile : cssFiles){
-                scene.getStylesheets().add(getClass().getResource(cssfile).toExternalForm());
+            for (String cssFile : cssFiles){
+                scene.getStylesheets().add(getClass().getResource(cssFile).toExternalForm());
             }
         }
         // Loads the FXML file and resources into the scene
