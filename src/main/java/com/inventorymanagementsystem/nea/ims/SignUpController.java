@@ -47,7 +47,7 @@ public class SignUpController extends DefaultController {
             String password = passField.getText();
             String confPassword = cPassField.getText();
 
-            if (Validator.username(username) && Validator.password(password) && Validator.username(name)) {
+            if (Validator.username(username) && Validator.password(password) && Validator.general(name)) {
                 if (!password.equals(confPassword)){
                     throw new IllegalArgumentException("Passwords do not match!");
                 }
@@ -56,11 +56,14 @@ public class SignUpController extends DefaultController {
             }
         } catch (IllegalArgumentException e){
           errorLbl.setText(e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void createAccount(String username, String name, String password) {
-        try {
+    public void createAccount(String username, String name, String password) throws SQLException, NoSuchAlgorithmException {
             String url = "jdbc:sqlite:C:\\Users\\s230379\\OneDrive - Greenhead College\\Documents\\GitHub\\InventoryManagementSystem\\Source_code\\src\\main\\resources\\com\\inventorymanagementsystem\\nea\\ims\\SQLdb\\IMS_database";
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
@@ -71,8 +74,7 @@ public class SignUpController extends DefaultController {
             // Performs query
 
             if (results.next() && results.getInt(1) != 0) {
-                errorLbl.setText("Sorry, username already taken!");
-                return;
+                throw new IllegalArgumentException("Sorry, username already taken!");
             }
 
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
@@ -85,10 +87,7 @@ public class SignUpController extends DefaultController {
             insertStatement.setBytes(3, hash);
             insertStatement.executeUpdate();
             // Sets parameters of prepared statement and runs it
-
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
     }
-
 }
+
+
