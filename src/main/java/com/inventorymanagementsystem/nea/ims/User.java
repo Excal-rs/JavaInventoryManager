@@ -7,7 +7,7 @@ public class User {
     private static String name;
 
 
-    public static void setCurrentUser(String username) throws SQLException {
+    public static String setCurrentUser(String username) throws SQLException {
         String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
         Connection connection = DriverManager.getConnection(url);
         // Sets up SQL connection
@@ -20,11 +20,11 @@ public class User {
         if (results.next()){
             name = results.getString("name");
             User.username = username;
+            return "";
         }
         else {
-            throw new IllegalArgumentException("No such user exists!");
+            return "No such user exists!";
         }
-
     }
 
     // Getters / Setters

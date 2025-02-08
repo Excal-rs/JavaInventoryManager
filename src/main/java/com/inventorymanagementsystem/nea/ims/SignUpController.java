@@ -31,7 +31,6 @@ public class SignUpController extends DefaultController {
             switchToScene(event, "login.fxml", new String[]{"styles/signup_login.css"},"IMS - Log In" );
         } catch (IOException e) {
             System.out.println("Change scene caused error");
-            // TODO: when errorPopup is created, add one here
         }
     }
 
@@ -42,23 +41,36 @@ public class SignUpController extends DefaultController {
             String password = passField.getText();
             String confPassword = cPassField.getText();
 
-            if (Validator.username(username) && Validator.password(password) && Validator.general(name)) {
-                if (!password.equals(confPassword)){
-                    throw new IllegalArgumentException("Passwords do not match!");
+            ValidationResult usernameCheck = Validator.username(username);
+            ValidationResult passwordCheck = Validator.password(password);
+            ValidationResult nameCheck = (Validator.general(name));
+            if (!usernameCheck.isValid() || !passwordCheck.isValid() || !nameCheck.isValid()) {
+                if (!usernameCheck.isValid()) {
+                    errorLbl.setText(usernameCheck.getReason());
+                } else if (!passwordCheck.isValid()) {
+                    errorLbl.setText(passwordCheck.getReason());
+                } else {
+                    errorLbl.setText(nameCheck.getReason());
                 }
-                createAccount(username,name,password);
+            }
+            else {
+                if (!password.equals(confPassword)){
+                    errorLbl.setText("Passwords don't match try again!");
+                    return;
+                }
+                ValidationResult accountCreation = createAccount(username, name, password);
+                if (!accountCreation.isValid()){
+                    errorLbl.setText(accountCreation.getReason());
+                    return;
+                }
                 successPopup("Sign Up Successful!", "You can now login!");
             }
-        } catch (IllegalArgumentException e){
-          errorLbl.setText(e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void createAccount(String username, String name, String password) throws SQLException, NoSuchAlgorithmException {
+    public ValidationResult createAccount(String username, String name, String password) throws SQLException, NoSuchAlgorithmException {
             String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
@@ -69,7 +81,7 @@ public class SignUpController extends DefaultController {
             // Performs query
 
             if (results.next() && results.getInt(1) != 0) {
-                throw new IllegalArgumentException("Sorry, username already taken!");
+                return new ValidationResult(false, "Sorry, username already taken!");
             }
 
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
@@ -82,6 +94,8 @@ public class SignUpController extends DefaultController {
             insertStatement.setBytes(3, hash);
             insertStatement.executeUpdate();
             // Sets parameters of prepared statement and runs it
+
+            return new ValidationResult(true);
     }
 }
 

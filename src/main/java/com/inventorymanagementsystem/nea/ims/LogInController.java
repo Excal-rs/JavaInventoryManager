@@ -24,33 +24,42 @@ public class LogInController extends DefaultController{
     public void login(ActionEvent event) throws SQLException, NoSuchAlgorithmException {
         String username = userField.getText();
         String password = passField.getText();
-        try {
-            if (Validator.username(username) && Validator.password(password)){
-                String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-                Connection connection = DriverManager.getConnection(url);
-                // Sets up SQL connection
 
-                PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
-                getStatement.setString(1, username);
-                ResultSet results = getStatement.executeQuery();
-                // Performs query
+        ValidationResult usernameCheck = Validator.username(username);
+        ValidationResult passwordCheck = Validator.password(password);
 
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-                // Hashes given password
-
-                if (results.next()){
-                    byte[] actualHash = results.getBytes("hashedPassword");
-                    if (!Arrays.equals(hash, actualHash)){
-                        throw new IllegalArgumentException("Incorrect username or password!");
-                    }
-
-                    User.setCurrentUser(username);
-                    successPopup("Lowgin Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
-                }
+        if (!usernameCheck.isValid() || !passwordCheck.isValid()){
+            if (!usernameCheck.isValid()){
+                errorLbl.setText(usernameCheck.getReason());
             }
-        } catch (IllegalArgumentException e) {
-            errorLbl.setText(e.getMessage());
+            else {
+                errorLbl.setText(passwordCheck.getReason());
+            }
+        }
+        else {
+            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+            Connection connection = DriverManager.getConnection(url);
+            // Sets up SQL connection
+
+            PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+            getStatement.setString(1, username);
+            ResultSet results = getStatement.executeQuery();
+            // Performs query
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            // Hashes given password
+
+            if (results.next()) {
+                byte[] actualHash = results.getBytes("hashedPassword");
+                if (!Arrays.equals(hash, actualHash)) {
+                    errorLbl.setText("Incorrect username or password!");
+                    return;
+                }
+
+                User.setCurrentUser(username);
+                successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
+            }
         }
     }
 
