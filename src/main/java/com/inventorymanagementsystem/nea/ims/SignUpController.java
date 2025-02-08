@@ -25,15 +25,10 @@ public class SignUpController extends DefaultController {
     private PasswordField passField;
     @FXML
     private PasswordField cPassField;
-    @FXML
-    private Button signupBtn;
-    @FXML
-    private Button loginBtn;
-
 
     public void switchToLogin(ActionEvent event){
         try {
-            switchToScene(event, "login.fxml", new String[]{"styles/signup_login.css"},"IMS - log in" );
+            switchToScene(event, "login.fxml", new String[]{"styles/signup_login.css"},"IMS - Log In" );
         } catch (IOException e) {
             System.out.println("Change scene caused error");
             // TODO: when errorPopup is created, add one here
@@ -64,7 +59,7 @@ public class SignUpController extends DefaultController {
     }
 
     public void createAccount(String username, String name, String password) throws SQLException, NoSuchAlgorithmException {
-            String url = "jdbc:sqlite:C:\\Users\\s230379\\OneDrive - Greenhead College\\Documents\\GitHub\\InventoryManagementSystem\\Source_code\\src\\main\\resources\\com\\inventorymanagementsystem\\nea\\ims\\SQLdb\\IMS_database";
+            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
 

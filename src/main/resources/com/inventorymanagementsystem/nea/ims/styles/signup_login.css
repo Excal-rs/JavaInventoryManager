@@ -22,7 +22,7 @@ Button, TextField, PasswordField  {
     -fx-background-radius: 10;
 }
 
-#signupBtn {
+#mainBtn {
     -fx-background-color: #383896;
     -fx-font-weight: bold;
     -fx-text-fill: white;
@@ -30,7 +30,7 @@ Button, TextField, PasswordField  {
     -fx-border-width: 0;
 }
 
-#loginBtn {
+#secondaryBtn {
     -fx-text-fill: #383896;
     -fx-font-weight: bold;
 
@@ -45,14 +45,14 @@ Button:hover {
     -fx-opacity: 0.8;
 }
 
-#signupBtn:pressed {
+#mainBtn:pressed {
     -fx-background-color: transparent;
     -fx-text-fill: #383896;
     -fx-border-color: #383896;
     -fx-border-width: 2;
 }
 
-#loginBtn:pressed {
+#secondaryBtn:pressed {
         -fx-background-color: #383896;
         -fx-text-fill: white;
         -fx-border-width: 0;
