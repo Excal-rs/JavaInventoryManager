@@ -75,7 +75,7 @@ public class SignUpController extends DefaultController {
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
 
-            PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
+            PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE LOWER(username) = LOWER(?)");
             getStatement.setString(1, username);
             ResultSet results = getStatement.executeQuery();
             // Performs query
@@ -94,7 +94,7 @@ public class SignUpController extends DefaultController {
             insertStatement.setBytes(3, hash);
             insertStatement.executeUpdate();
             // Sets parameters of prepared statement and runs it
-
+            connection.close();
             return new ValidationResult(true);
     }
 }

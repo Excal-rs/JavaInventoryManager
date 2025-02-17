@@ -41,7 +41,7 @@ public class LogInController extends DefaultController{
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
 
-            PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+            PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
             getStatement.setString(1, username);
             ResultSet results = getStatement.executeQuery();
             // Performs query
@@ -54,12 +54,15 @@ public class LogInController extends DefaultController{
                 byte[] actualHash = results.getBytes("hashedPassword");
                 if (!Arrays.equals(hash, actualHash)) {
                     errorLbl.setText("Incorrect username or password!");
+                    connection.close();
                     return;
                 }
-
-                User.setCurrentUser(username);
+                User.setCurrentUser(results.getString("username"));
                 successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
+            } else {
+                errorLbl.setText("User does not exist!");
             }
+            connection.close();
         }
     }
 

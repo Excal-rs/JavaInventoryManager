@@ -12,7 +12,7 @@ public class User {
         Connection connection = DriverManager.getConnection(url);
         // Sets up SQL connection
 
-        PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+        PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
         getStatement.setString(1, username);
         ResultSet results = getStatement.executeQuery();
         // Performs query
@@ -20,9 +20,11 @@ public class User {
         if (results.next()){
             name = results.getString("name");
             User.username = username;
+            connection.close();
             return "";
         }
         else {
+            connection.close();
             return "No such user exists!";
         }
     }

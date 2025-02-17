@@ -29,6 +29,7 @@ public class MainApplication extends Application {
             fxmlLoader = new FXMLLoader(MainApplication.class.getResource("signup.fxml"));
             title = "IMS - Sign Up";
         }
+        connection.close();
         // Chooses which form to load
 
         Scene scene = new Scene(fxmlLoader.load());
