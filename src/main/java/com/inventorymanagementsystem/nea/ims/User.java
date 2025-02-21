@@ -19,7 +19,7 @@ public class User {
 
         if (results.next()){
             name = results.getString("name");
-            User.username = username;
+            User.username = results.getString("username");
             connection.close();
             return "";
         }

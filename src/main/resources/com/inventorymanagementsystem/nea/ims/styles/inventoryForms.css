@@ -1,0 +1,79 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-base-colour: #383896;
+    -fx-background-color: -fx-base-colour;
+}
+
+#backdrop {
+    -fx-fill: #FAFAFA;
+    -fx-stroke-width: 0;
+}
+
+#titleLbl {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+Button, TextField, TextArea, ToggleButton, Spinner {
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+Spinner .increment-arrow-button, .decrement-arrow-button{
+    -fx-background-color: -fx-base-colour;
+}
+Spinner .increment-arrow-button .increment-arrow, .decrement-arrow-button .decrement-arrow{
+    -fx-background-color: white;
+}
+
+Button:hover, ToggleButton:hover, Spinner .increment-arrow-button:hover, Spinner .decrement-arrow-button:hover {
+  -fx-cursor: hand;
+  -fx-opacity: 0.8;
+}
+
+Button:pressed, ToggleButton:pressed, Spinner .increment-arrow-button:pressed, Spinner .decrement-arrow-button:pressed {
+  -fx-cursor: closed-hand
+}
+
+.fieldLbl {
+  -fx-font-size: 15px;
+}
+
+ToggleButton {
+    -fx-text-fill: -fx-base-colour;
+    -fx-font-weight: bold;
+    -fx-border-width: 2;
+    -fx-border-color: -fx-base-colour;
+    -fx-background-color: white;
+}
+
+ToggleButton:selected {
+    -fx-background-color: -fx-base-colour;
+    -fx-font-weight: bold;
+    -fx-text-fill: white ;
+    -fx-border-width: 0;
+}
+
+#cancelBtn, #submitBtn:pressed {
+    -fx-background-color: -fx-base-colour;
+    -fx-font-weight: bold;
+    -fx-text-fill: white ;
+    -fx-border-width: 0;
+}
+
+#submitBtn, #cancelBtn:hover {
+    -fx-text-fill: -fx-base-colour;
+    -fx-font-weight: bold;
+    -fx-border-width: 0;
+    -fx-background-color: white;
+}
+
+#titleBacker {
+  -fx-stroke-width: 0;
+  -fx-fill: -fx-base-colour;  
+}
+
+#errorLbl {
+    -fx-text-fill: red;
+}

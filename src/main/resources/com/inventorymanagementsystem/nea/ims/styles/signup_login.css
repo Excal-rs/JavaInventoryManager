@@ -1,13 +1,13 @@
 .root {
     -fx-font-family: "Arial";
-    -fx-background-color: #383896
+    -fx-background-color: #383896;
 }
 
 #backdrop {
     -fx-fill: #FAFAFA;
     -fx-stroke-width: 0;
-
 }
+
 #titleLbl {
     -fx-font-size: 25px;
     -fx-font-weight: bold;

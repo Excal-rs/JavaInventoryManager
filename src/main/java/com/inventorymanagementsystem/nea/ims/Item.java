@@ -1,0 +1,261 @@
+package com.inventorymanagementsystem.nea.ims;
+
+import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+
+public class Item {
+    private String name;
+    private String description;
+    private boolean trackInstances;
+    private boolean customFields;
+    private double purchasePrice;
+    private String purchaseDate;
+    private int quantity;
+    private HashMap<Integer, ItemInstance> instances;
+
+    public Item(String name, String description, boolean trackInstances,
+                boolean customFields, int purchasePrice, long purchaseDate,int quantity){
+        this.name = name;
+        this.description = description;
+        this.trackInstances = trackInstances;
+        this.customFields = customFields;
+        this.purchasePrice = (double) purchasePrice / 100.0;
+        this.purchaseDate = unixToDate(purchaseDate);
+        // Converts unix time to a formatted string
+
+        this.quantity = quantity;
+        updateInstances();
+    }
+
+    public Item(Item item){
+        this.name = item.getName();
+        this.description = item.getDescription();
+        this.trackInstances = item.isTrackInstances();
+        this.customFields = item.isCustomFields();
+        this.purchasePrice = item.getPurchasePrice();
+        this.purchaseDate = item.getDate();
+        this.quantity = item.getQuantity();
+        this.instances = item.getInstances();
+    }
+    // Used when copying items;
+
+    public Item copyItem(){
+        Item newItem = new Item(this);
+        return newItem;
+    }
+    // Instance Management ---------------------------------------------------------------------------------------------
+    public void updateInstances() {
+        if (!trackInstances){
+            instances = null;
+            // Check if track instances is true
+        }
+        try {
+            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+            Connection connection = DriverManager.getConnection(url);
+            // Sets up SQL connection
+
+            PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM itemInstances " +
+                    "WHERE LOWER(userID) = LOWER(?) " +
+                    "AND LOWER(itemID) = LOWER(?);");
+            getStatement.setString(1, User.getUsername());
+            getStatement.setString(2, this.name);
+
+            ResultSet results = getStatement.executeQuery();
+
+            instances = instances == null ? new HashMap<Integer, ItemInstance>():instances;
+            // Initialise if instances is null, otherwise do nothing
+
+            while (results.next()){
+                instances.put(results.getInt("instanceID"), new ItemInstance(this,results.getInt("instanceID") ,results.getString("notes"), results.getString("location")));
+            } // Copies results of query into a hashmap of instances so it can stay even after connection is closed
+
+            connection.close();
+            // Performs query and returns results
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ValidationResult addInstance(ItemInstance instance){
+        if (!trackInstances){
+            return new ValidationResult(false, "Item set to not track instances!");
+            // Check if track instances is true
+        }
+        try {
+            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+            Connection connection = DriverManager.getConnection(url);
+            // Sets up SQL connection
+
+            PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM itemInstances WHERE LOWER(userID) = LOWER(?) " +
+                    "AND LOWER(itemID) = LOWER(?) AND instanceID = ?;");
+            getStatement.setString(1, User.getUsername());
+            getStatement.setString(2, this.name);
+            getStatement.setInt(3, instance.getIdentifier());
+            ResultSet results = getStatement.executeQuery();
+            if (results.next() && results.getInt(1) != 0){
+                return new ValidationResult(false, "Instance already exists!");
+            }
+
+            PreparedStatement updateStatement = connection.prepareStatement("INSERT INTO itemInstances (userID, itemID, instanceID, notes, location) " +
+                    "VALUES (?,?,?,?,?);");
+            updateStatement.setString(1, User.getUsername());
+            updateStatement.setString(2, this.name);
+            updateStatement.setInt(3, instance.getIdentifier());
+            updateStatement.setString(4, instance.getNotes());
+            updateStatement.setString(5, instance.getLocation());
+            // Sets values of prepared statement
+
+            updateStatement.executeUpdate();
+            connection.close();
+            // Performs update
+
+            quantity++;
+            Inventory.editItem(this);
+            instances.put(instance.getIdentifier(), instance);
+            return new ValidationResult(true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeInstance(ItemInstance instance){
+        if (!trackInstances){
+            return;
+        }
+        try {
+            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+            Connection connection = DriverManager.getConnection(url);
+            // Sets up SQL connection
+
+            PreparedStatement updateStatement = connection.prepareStatement("DELETE FROM itemInstances " +
+                    "WHERE LOWER(userID) == LOWER(?) AND " +
+                    "LOWER(itemID) == LOWER(?) AND " +
+                    "instanceID == ?");
+
+            updateStatement.setString(1, User.getUsername());
+            updateStatement.setString(2, this.name);
+            updateStatement.setInt(3, instance.getIdentifier());
+            // Sets values of prepared statement
+
+            updateStatement.executeUpdate();
+            connection.close();
+            // Performs update
+
+            quantity--;
+            Inventory.editItem(this);
+            instances.remove(instance.getIdentifier());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void editInstance(ItemInstance instance){
+        if (!trackInstances){
+            return;
+        }
+        try {
+            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+            Connection connection = DriverManager.getConnection(url);
+            // Sets up SQL connection
+
+            PreparedStatement updateStatement = connection.prepareStatement("UPDATE itemInstances " +
+                    "SET notes = ?, location = ?" +
+                    "WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?) AND instanceID = ?");
+
+            updateStatement.setString(1, instance.getNotes());
+            updateStatement.setString(2, instance.getLocation());
+            updateStatement.setString(3, User.getUsername());
+            updateStatement.setString(4, this.name);
+            updateStatement.setInt(5, instance.getIdentifier());
+            // Sets values of prepared statement
+
+            updateStatement.executeUpdate();
+            connection.close();
+            // Performs update
+
+            instances.put(instance.getIdentifier(), instance);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Misc ------------------------------------------------------------------------------------------------------------
+    public static long dateToUnix(String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        Instant instant = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        long unixTime = instant.getEpochSecond();
+
+        return unixTime;
+    }
+
+    private static String unixToDate(long unixTime){
+        Instant instant = Instant.ofEpochSecond(unixTime);
+        String date = DateTimeFormatter.ofPattern("dd-MM-yyyy").withZone(ZoneId.systemDefault()).format(instant);
+        return date;
+    }
+    // Getters ---------------------------------------------------------------------------------------------------------
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public HashMap<Integer, ItemInstance> getInstances() {
+        return instances;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public boolean isCustomFields() {
+        return customFields;
+    }
+
+    public boolean isTrackInstances() {
+        return trackInstances;
+    }
+
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public String getDate() {
+        return purchaseDate;
+    }
+
+    // Setters ---------------------------------------------------------------------------------------------------------
+
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCustomFields(boolean customFields) {
+        this.customFields = customFields;
+    }
+
+    public void setPurchaseDate(String purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public void setTrackInstances(boolean trackInstances) {
+        this.trackInstances = trackInstances;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+}
