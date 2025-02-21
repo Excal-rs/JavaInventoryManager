@@ -1,15 +1,15 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Classes;
 
 public class ValidationResult {
     private final boolean isValid;
     private final String reason;
 
-    public ValidationResult(boolean isValid){
+    public ValidationResult(boolean isValid) {
         this.isValid = isValid;
         this.reason = null;
     }
 
-    public ValidationResult(boolean isValid, String reason){
+    public ValidationResult(boolean isValid, String reason) {
         this.isValid = isValid;
         this.reason = reason;
     }
@@ -17,7 +17,8 @@ public class ValidationResult {
     public boolean isValid() {
         return isValid;
     }
-    public String getReason(){
+
+    public String getReason() {
         return reason;
     }
 

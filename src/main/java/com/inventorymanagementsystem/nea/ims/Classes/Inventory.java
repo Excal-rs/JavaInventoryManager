@@ -1,21 +1,21 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Classes;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class Inventory {
     private static final String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-    private static HashMap<String, Item> items = new HashMap<>();
+    private static final HashMap<String, Item> items = new HashMap<>();
+
     static {
         updateItems();
     }
 
     // Item Management -------------------------------------------------------------------------------------------------
-    public static void updateItems(){
+    public static void updateItems() {
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement getItemsStatement = connection.prepareStatement("SELECT * FROM items " +
@@ -24,10 +24,10 @@ public class Inventory {
             ResultSet results = getItemsStatement.executeQuery();
             // Fetches result set from database
 
-            while (results.next()){
+            while (results.next()) {
                 Item newItem = new Item(results.getString("itemID"), results.getString("itemDescription"), results.getBoolean("trackInstances"),
-                        results.getBoolean("useCustomFields") , results.getInt("purchasePrice"), results.getInt("purchaseDate"), results.getInt("quantity"));
-                items.put(results.getString("itemID").toLowerCase(),  newItem);
+                        results.getBoolean("useCustomFields"), results.getInt("purchasePrice"), results.getInt("purchaseDate"), results.getInt("quantity"));
+                items.put(results.getString("itemID").toLowerCase(), newItem);
             }
             connection.close();
         } catch (Exception e) {
@@ -35,11 +35,11 @@ public class Inventory {
         }
     }
 
-    public static ValidationResult addItem(Item item){
-        if (items.get(item.getName().toLowerCase()) != null){
+    public static ValidationResult addItem(Item item) {
+        if (items.get(item.getName().toLowerCase()) != null) {
             return new ValidationResult(false, "Item already exists!");
         }
-        try{
+        try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO items " +
                     "VALUES (?,?,?,?,?,?,?,?);");
@@ -54,12 +54,12 @@ public class Inventory {
 
             insertStatement.executeUpdate();
 
-            if (item.isTrackInstances()){
+            if (item.isTrackInstances()) {
                 PreparedStatement addAllInstances = connection.prepareStatement("INSERT INTO itemInstances VALUES (?,?,?,'N/A','N/A');");
                 addAllInstances.setString(1, User.getUsername());
                 addAllInstances.setString(2, item.getName());
 
-                for (int i = 1; i < item.getQuantity() + 1; i++){
+                for (int i = 1; i < item.getQuantity() + 1; i++) {
                     addAllInstances.setInt(3, i);
                     addAllInstances.executeUpdate();
                 }
@@ -73,13 +73,13 @@ public class Inventory {
         }
     }
 
-    public static ValidationResult removeItem(Item item){
-        if (items.get(item.getName().toLowerCase())== null){
+    public static ValidationResult removeItem(Item item) {
+        if (items.get(item.getName().toLowerCase()) == null) {
             return new ValidationResult(false, "Item does not exist!");
         }
         try {
             Connection connection = DriverManager.getConnection(url);
-            if (item.isTrackInstances()){
+            if (item.isTrackInstances()) {
                 PreparedStatement removeInstancesStatement = connection.prepareStatement("DELETE FROM itemInstances WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
                 removeInstancesStatement.setString(1, User.getUsername());
                 removeInstancesStatement.setString(2, item.getName());
@@ -101,15 +101,15 @@ public class Inventory {
         }
     }
 
-    public static ValidationResult editItem(Item item){
-        if(items.get(item.getName().toLowerCase()) == null){
+    public static ValidationResult editItem(Item item) {
+        if (items.get(item.getName().toLowerCase()) == null) {
             return new ValidationResult(false, "Item does not exist");
         }
         try {
             Connection connection = DriverManager.getConnection(url);
 
-            if (items.get(item.getName().toLowerCase()).isTrackInstances() ^ item.isTrackInstances()){
-                if (!item.isTrackInstances()){
+            if (items.get(item.getName().toLowerCase()).isTrackInstances() ^ item.isTrackInstances()) {
+                if (!item.isTrackInstances()) {
                     PreparedStatement deleteInstancesStatement = connection.prepareStatement("DELETE FROM itemInstances " +
                             "WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
                     deleteInstancesStatement.setString(1, User.getUsername());
@@ -121,7 +121,7 @@ public class Inventory {
                             "VALUES (?,?,?);");
                     generateInstancesStatement.setString(1, User.getUsername());
                     generateInstancesStatement.setString(2, item.getName());
-                    for (int i = 1; i < item.getQuantity()+1; i++){
+                    for (int i = 1; i < item.getQuantity() + 1; i++) {
                         generateInstancesStatement.setInt(3, i);
                         generateInstancesStatement.executeUpdate();
                     }

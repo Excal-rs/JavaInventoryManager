@@ -9,4 +9,8 @@ module com.inventorymanagementsystem.nea.ims {
 
     opens com.inventorymanagementsystem.nea.ims to javafx.fxml;
     exports com.inventorymanagementsystem.nea.ims;
+    exports com.inventorymanagementsystem.nea.ims.Controllers;
+    opens com.inventorymanagementsystem.nea.ims.Controllers to javafx.fxml;
+    exports com.inventorymanagementsystem.nea.ims.Classes;
+    opens com.inventorymanagementsystem.nea.ims.Classes to javafx.fxml;
 }

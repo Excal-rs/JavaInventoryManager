@@ -1,7 +1,6 @@
 package com.inventorymanagementsystem.nea.ims;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -10,6 +9,10 @@ import java.io.IOException;
 import java.sql.*;
 
 public class MainApplication extends Application {
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws IOException, SQLException {
         FXMLLoader fxmlLoader;
@@ -22,7 +25,7 @@ public class MainApplication extends Application {
         Statement statement = connection.createStatement();
         ResultSet results = statement.executeQuery("SELECT COUNT(*) FROM users");
         // Performs query to check if any users exist in local database
-        if (results.next() && results.getInt(1) != 0){
+        if (results.next() && results.getInt(1) != 0) {
             fxmlLoader = new FXMLLoader(MainApplication.class.getResource("login.fxml"));
             title = "IMS - Log In";
         } else {
@@ -41,9 +44,5 @@ public class MainApplication extends Application {
         stage.setScene(scene);
         stage.show();
         // Displays scene
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }

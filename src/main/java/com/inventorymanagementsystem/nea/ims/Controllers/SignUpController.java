@@ -1,8 +1,9 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.Classes.ValidationResult;
+import com.inventorymanagementsystem.nea.ims.Classes.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -26,15 +27,15 @@ public class SignUpController extends DefaultController {
     @FXML
     private PasswordField cPassField;
 
-    public void switchToLogin(ActionEvent event){
+    public void switchToLogin(ActionEvent event) {
         try {
-            switchToScene(event, "login.fxml", new String[]{"styles/signup_login.css"},"IMS - Log In" );
+            switchToScene(event, "login.fxml", new String[]{"styles/signup_login.css"}, "IMS - Log In");
         } catch (IOException e) {
             System.out.println("Change scene caused error");
         }
     }
 
-    public void signup(ActionEvent event){
+    public void signup(ActionEvent event) {
         try {
             String username = userField.getText();
             String name = nameField.getText();
@@ -52,14 +53,13 @@ public class SignUpController extends DefaultController {
                 } else {
                     errorLbl.setText(nameCheck.getReason());
                 }
-            }
-            else {
-                if (!password.equals(confPassword)){
+            } else {
+                if (!password.equals(confPassword)) {
                     errorLbl.setText("Passwords don't match try again!");
                     return;
                 }
                 ValidationResult accountCreation = createAccount(username, name, password);
-                if (!accountCreation.isValid()){
+                if (!accountCreation.isValid()) {
                     errorLbl.setText(accountCreation.getReason());
                     return;
                 }
@@ -71,31 +71,31 @@ public class SignUpController extends DefaultController {
     }
 
     public ValidationResult createAccount(String username, String name, String password) throws SQLException, NoSuchAlgorithmException {
-            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-            Connection connection = DriverManager.getConnection(url);
-            // Sets up SQL connection
+        String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+        Connection connection = DriverManager.getConnection(url);
+        // Sets up SQL connection
 
-            PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE LOWER(username) = LOWER(?)");
-            getStatement.setString(1, username);
-            ResultSet results = getStatement.executeQuery();
-            // Performs query
+        PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE LOWER(username) = LOWER(?)");
+        getStatement.setString(1, username);
+        ResultSet results = getStatement.executeQuery();
+        // Performs query
 
-            if (results.next() && results.getInt(1) != 0) {
-                return new ValidationResult(false, "Sorry, username already taken!");
-            }
+        if (results.next() && results.getInt(1) != 0) {
+            return new ValidationResult(false, "Sorry, username already taken!");
+        }
 
-            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            // Hashes password
+        PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)");
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        // Hashes password
 
-            insertStatement.setString(1, username);
-            insertStatement.setString(2, name);
-            insertStatement.setBytes(3, hash);
-            insertStatement.executeUpdate();
-            // Sets parameters of prepared statement and runs it
-            connection.close();
-            return new ValidationResult(true);
+        insertStatement.setString(1, username);
+        insertStatement.setString(2, name);
+        insertStatement.setBytes(3, hash);
+        insertStatement.executeUpdate();
+        // Sets parameters of prepared statement and runs it
+        connection.close();
+        return new ValidationResult(true);
     }
 }
 

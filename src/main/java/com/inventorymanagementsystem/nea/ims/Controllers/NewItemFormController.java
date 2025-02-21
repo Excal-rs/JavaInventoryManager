@@ -1,4 +1,4 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,7 +33,7 @@ public class NewItemFormController extends DefaultController implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999,1,1);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999, 1, 1);
         quantSpinner.setValueFactory(valueFactory);
         // Initialises the Spinner min, max and initial value
     }
@@ -43,8 +43,8 @@ public class NewItemFormController extends DefaultController implements Initiali
         if (confirmed) {
 //            String[] cssfiles = {};
 //            switchToScene(event, "overview.fxml", cssfiles, "IMS - Overview");
-             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
-             stage.close();
+            Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
+            stage.close();
         }
     }
 

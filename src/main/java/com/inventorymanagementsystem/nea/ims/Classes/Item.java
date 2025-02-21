@@ -1,6 +1,9 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Classes;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -8,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class Item {
-    private String name;
+    private final String name;
     private String description;
     private boolean trackInstances;
     private boolean customFields;
@@ -18,7 +21,7 @@ public class Item {
     private HashMap<Integer, ItemInstance> instances;
 
     public Item(String name, String description, boolean trackInstances,
-                boolean customFields, int purchasePrice, long purchaseDate,int quantity){
+                boolean customFields, int purchasePrice, long purchaseDate, int quantity) {
         this.name = name;
         this.description = description;
         this.trackInstances = trackInstances;
@@ -31,7 +34,7 @@ public class Item {
         updateInstances();
     }
 
-    public Item(Item item){
+    public Item(Item item) {
         this.name = item.getName();
         this.description = item.getDescription();
         this.trackInstances = item.isTrackInstances();
@@ -43,13 +46,30 @@ public class Item {
     }
     // Used when copying items;
 
-    public Item copyItem(){
+    // Misc ------------------------------------------------------------------------------------------------------------
+    public static long dateToUnix(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        Instant instant = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        long unixTime = instant.getEpochSecond();
+
+        return unixTime;
+    }
+
+    private static String unixToDate(long unixTime) {
+        Instant instant = Instant.ofEpochSecond(unixTime);
+        String date = DateTimeFormatter.ofPattern("dd-MM-yyyy").withZone(ZoneId.systemDefault()).format(instant);
+        return date;
+    }
+
+    public Item copyItem() {
         Item newItem = new Item(this);
         return newItem;
     }
+
     // Instance Management ---------------------------------------------------------------------------------------------
     public void updateInstances() {
-        if (!trackInstances){
+        if (!trackInstances) {
             instances = null;
             // Check if track instances is true
         }
@@ -66,11 +86,11 @@ public class Item {
 
             ResultSet results = getStatement.executeQuery();
 
-            instances = instances == null ? new HashMap<Integer, ItemInstance>():instances;
+            instances = instances == null ? new HashMap<Integer, ItemInstance>() : instances;
             // Initialise if instances is null, otherwise do nothing
 
-            while (results.next()){
-                instances.put(results.getInt("instanceID"), new ItemInstance(this,results.getInt("instanceID") ,results.getString("notes"), results.getString("location")));
+            while (results.next()) {
+                instances.put(results.getInt("instanceID"), new ItemInstance(this, results.getInt("instanceID"), results.getString("notes"), results.getString("location")));
             } // Copies results of query into a hashmap of instances so it can stay even after connection is closed
 
             connection.close();
@@ -80,8 +100,8 @@ public class Item {
         }
     }
 
-    public ValidationResult addInstance(ItemInstance instance){
-        if (!trackInstances){
+    public ValidationResult addInstance(ItemInstance instance) {
+        if (!trackInstances) {
             return new ValidationResult(false, "Item set to not track instances!");
             // Check if track instances is true
         }
@@ -96,7 +116,7 @@ public class Item {
             getStatement.setString(2, this.name);
             getStatement.setInt(3, instance.getIdentifier());
             ResultSet results = getStatement.executeQuery();
-            if (results.next() && results.getInt(1) != 0){
+            if (results.next() && results.getInt(1) != 0) {
                 return new ValidationResult(false, "Instance already exists!");
             }
 
@@ -122,8 +142,8 @@ public class Item {
         }
     }
 
-    public void removeInstance(ItemInstance instance){
-        if (!trackInstances){
+    public void removeInstance(ItemInstance instance) {
+        if (!trackInstances) {
             return;
         }
         try {
@@ -153,8 +173,8 @@ public class Item {
         }
     }
 
-    public void editInstance(ItemInstance instance){
-        if (!trackInstances){
+    public void editInstance(ItemInstance instance) {
+        if (!trackInstances) {
             return;
         }
         try {
@@ -182,22 +202,6 @@ public class Item {
             throw new RuntimeException(e);
         }
     }
-
-    // Misc ------------------------------------------------------------------------------------------------------------
-    public static long dateToUnix(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        Instant instant = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-        long unixTime = instant.getEpochSecond();
-
-        return unixTime;
-    }
-
-    private static String unixToDate(long unixTime){
-        Instant instant = Instant.ofEpochSecond(unixTime);
-        String date = DateTimeFormatter.ofPattern("dd-MM-yyyy").withZone(ZoneId.systemDefault()).format(instant);
-        return date;
-    }
     // Getters ---------------------------------------------------------------------------------------------------------
 
     public String getName() {
@@ -208,6 +212,10 @@ public class Item {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public HashMap<Integer, ItemInstance> getInstances() {
         return instances;
     }
@@ -216,46 +224,41 @@ public class Item {
         return quantity;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public boolean isCustomFields() {
         return customFields;
-    }
-
-    public boolean isTrackInstances() {
-        return trackInstances;
-    }
-
-    public double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public String getDate() {
-        return purchaseDate;
-    }
-
-    // Setters ---------------------------------------------------------------------------------------------------------
-
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public void setCustomFields(boolean customFields) {
         this.customFields = customFields;
     }
 
-    public void setPurchaseDate(String purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
+    // Setters ---------------------------------------------------------------------------------------------------------
 
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
+    public boolean isTrackInstances() {
+        return trackInstances;
     }
 
     public void setTrackInstances(boolean trackInstances) {
         this.trackInstances = trackInstances;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public String getDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(String purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 }

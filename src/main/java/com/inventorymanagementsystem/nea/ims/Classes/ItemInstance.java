@@ -1,10 +1,10 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Classes;
 
 public class ItemInstance {
-    private Item item;
-    private int identifier;
-    private String notes;
-    private String location;
+    private final Item item;
+    private final int identifier;
+    private final String notes;
+    private final String location;
 
     public ItemInstance(Item item, int identifier, String notes, String location) {
         this.item = item;

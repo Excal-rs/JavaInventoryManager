@@ -1,5 +1,8 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.Classes.User;
+import com.inventorymanagementsystem.nea.ims.Classes.ValidationResult;
+import com.inventorymanagementsystem.nea.ims.Classes.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -13,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Arrays;
 
-public class LogInController extends DefaultController{
+public class LogInController extends DefaultController {
     @FXML
     private TextField userField;
     @FXML
@@ -28,15 +31,13 @@ public class LogInController extends DefaultController{
         ValidationResult usernameCheck = Validator.username(username);
         ValidationResult passwordCheck = Validator.password(password);
 
-        if (!usernameCheck.isValid() || !passwordCheck.isValid()){
-            if (!usernameCheck.isValid()){
+        if (!usernameCheck.isValid() || !passwordCheck.isValid()) {
+            if (!usernameCheck.isValid()) {
                 errorLbl.setText(usernameCheck.getReason());
-            }
-            else {
+            } else {
                 errorLbl.setText(passwordCheck.getReason());
             }
-        }
-        else {
+        } else {
             String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
             Connection connection = DriverManager.getConnection(url);
             // Sets up SQL connection
@@ -66,9 +67,9 @@ public class LogInController extends DefaultController{
         }
     }
 
-    public void switchToSignup(ActionEvent event){
+    public void switchToSignup(ActionEvent event) {
         try {
-            switchToScene(event, "signup.fxml", new String[]{"styles/signup_login.css"},"IMS - Sign Up" );
+            switchToScene(event, "signup.fxml", new String[]{"styles/signup_login.css"}, "IMS - Sign Up");
         } catch (IOException e) {
             System.out.println("Change scene caused error");
         }

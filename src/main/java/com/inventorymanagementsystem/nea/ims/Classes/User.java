@@ -1,4 +1,4 @@
-package com.inventorymanagementsystem.nea.ims;
+package com.inventorymanagementsystem.nea.ims.Classes;
 
 import java.sql.*;
 
@@ -17,24 +17,23 @@ public class User {
         ResultSet results = getStatement.executeQuery();
         // Performs query
 
-        if (results.next()){
+        if (results.next()) {
             name = results.getString("name");
             User.username = results.getString("username");
             connection.close();
             return "";
-        }
-        else {
+        } else {
             connection.close();
             return "No such user exists!";
         }
     }
 
     // Getters / Setters
-    public static String getUsername(){
+    public static String getUsername() {
         return username;
     }
 
-    public static String getName(){
+    public static String getName() {
         return name;
     }
 

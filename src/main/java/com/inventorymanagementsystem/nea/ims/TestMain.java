@@ -1,9 +1,10 @@
 package com.inventorymanagementsystem.nea.ims;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import com.inventorymanagementsystem.nea.ims.Classes.Inventory;
+import com.inventorymanagementsystem.nea.ims.Classes.Item;
+import com.inventorymanagementsystem.nea.ims.Classes.User;
+
 import java.sql.SQLException;
-import java.util.HashMap;
 
 public class TestMain {
     public static void main(String[] args) throws SQLException {
