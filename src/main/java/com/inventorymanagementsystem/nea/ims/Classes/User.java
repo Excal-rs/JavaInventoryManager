@@ -7,7 +7,7 @@ public class User {
     private static String name;
 
 
-    public static String setCurrentUser(String username) throws SQLException {
+    public static ValidationResult setCurrentUser(String username) throws SQLException {
         String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
         Connection connection = DriverManager.getConnection(url);
         // Sets up SQL connection
@@ -21,10 +21,10 @@ public class User {
             name = results.getString("name");
             User.username = results.getString("username");
             connection.close();
-            return "";
+            return new ValidationResult(true);
         } else {
             connection.close();
-            return "No such user exists!";
+            return new ValidationResult(false, "No such user exists!");
         }
     }
 
