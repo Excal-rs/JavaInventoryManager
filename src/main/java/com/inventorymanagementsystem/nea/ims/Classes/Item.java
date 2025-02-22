@@ -86,7 +86,7 @@ public class Item {
 
             ResultSet results = getStatement.executeQuery();
 
-            instances = instances == null ? new HashMap<Integer, ItemInstance>() : instances;
+            instances = instances == null ? new HashMap<>() : instances;
             // Initialise if instances is null, otherwise do nothing
 
             while (results.next()) {

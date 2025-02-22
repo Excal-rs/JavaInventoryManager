@@ -41,8 +41,6 @@ public class NewItemFormController extends DefaultController implements Initiali
     public void closeForm(ActionEvent event) throws IOException {
         boolean confirmed = confirmationDialogue("Close Form", "Are you sure you want to do this, any unsaved work will be lost?");
         if (confirmed) {
-//            String[] cssfiles = {};
-//            switchToScene(event, "overview.fxml", cssfiles, "IMS - Overview");
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             stage.close();
         }
