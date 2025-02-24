@@ -15,24 +15,28 @@
     -fx-text-fill: white;
 }
 
-Button, TextField, TextArea, ToggleButton, Spinner {
+Button, TextField, TextArea, ToggleButton, Spinner, DatePicker {
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
 
-Spinner .increment-arrow-button, .decrement-arrow-button{
+TextField, Spinner, DatePicker {
+    -fx-pref-height: 36;
+}
+
+Spinner .increment-arrow-button, Spinner .decrement-arrow-button, DatePicker .arrow-button{
     -fx-background-color: -fx-base-colour;
 }
-Spinner .increment-arrow-button .increment-arrow, .decrement-arrow-button .decrement-arrow{
+Spinner .increment-arrow-button .increment-arrow, .decrement-arrow-button .decrement-arrow, DatePicker .arrow-button .arrow{
     -fx-background-color: white;
 }
 
-Button:hover, ToggleButton:hover, Spinner .increment-arrow-button:hover, Spinner .decrement-arrow-button:hover {
+Button:hover, ToggleButton:hover, Spinner .increment-arrow-button:hover, Spinner .decrement-arrow-button:hover, DatePicker .arrow-button:hover {
   -fx-cursor: hand;
   -fx-opacity: 0.8;
 }
 
-Button:pressed, ToggleButton:pressed, Spinner .increment-arrow-button:pressed, Spinner .decrement-arrow-button:pressed {
+Button:pressed, ToggleButton:pressed, Spinner .increment-arrow-button:pressed, Spinner .decrement-arrow-button:pressed, DatePicker .arrow-button:selected {
   -fx-cursor: closed-hand
 }
 
@@ -67,6 +71,18 @@ ToggleButton:selected {
     -fx-font-weight: bold;
     -fx-border-width: 0;
     -fx-background-color: white;
+}
+
+#deleteBtn {
+    -fx-background-color: -fx-base-colour;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-border-width: 2;
+    -fx-border-color: red;
+}
+
+#deleteBtn:hover {
+    -fx-background-color: red;
 }
 
 #titleBacker {

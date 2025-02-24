@@ -1,13 +1,19 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.Classes.Inventory;
 import com.inventorymanagementsystem.nea.ims.Classes.User;
 import com.inventorymanagementsystem.nea.ims.Classes.ValidationResult;
 import com.inventorymanagementsystem.nea.ims.Classes.Validator;
+import com.inventorymanagementsystem.nea.ims.MainApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -60,7 +66,18 @@ public class LogInController extends DefaultController {
                 }
                 User.setCurrentUser(results.getString("username"));
                 successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
-                switchToScene(event, "itemCreationForm.fxml", new String[] {"inventoryForms.css"}, "IMS - Add new Item");
+
+                loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItemForm.fxml"));
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(loader.load());
+                scene.getStylesheets().add("styles/inventoryForms.css");
+
+                EditItemFormController controller = loader.getController();
+                controller.setItem(Inventory.getItems().get("TestItem"));
+
+                stage.setScene(scene);
+                stage.setTitle("IMS - edit item");
+                stage.show();
             } else {
                 errorLbl.setText("User does not exist!");
             }

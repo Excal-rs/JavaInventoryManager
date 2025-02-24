@@ -16,7 +16,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class NewItemFormController extends DefaultController implements Initializable {
+public class EditItemFormController extends DefaultController implements Initializable {
     @FXML
     private Spinner<Integer> quantSpinner;
     @FXML
@@ -36,7 +36,11 @@ public class NewItemFormController extends DefaultController implements Initiali
     @FXML
     private Button cancelBtn;
     @FXML
+    private Button deleteBtn;
+    @FXML
     private Label errorLbl;
+
+    private Item item;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,21 +69,30 @@ public class NewItemFormController extends DefaultController implements Initiali
         TextField priceField = priceSpinner.getEditor();
         priceField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (!newValue) {
-                validateDoubleSpinners(priceField, (int) priceValueFactory.getMin(), (int) priceValueFactory.getMax());
+                validateDoubleSpinners(priceField, priceValueFactory.getMin(), priceValueFactory.getMax());
             }
         }));
         priceField.setOnAction(event -> {
-            validateDoubleSpinners(priceField, (int) priceValueFactory.getMin(), (int) priceValueFactory.getMax());
+            validateDoubleSpinners(priceField, priceValueFactory.getMin(), priceValueFactory.getMax());
             event.consume();
         });
         // Validate Inputs for price spinner
-
     }
+
+    public void setItem(Item item){
+        this.item = item;
+        nameField.setText(item.getName());
+        descriptionArea.setText(item.getDescription());
+        instanceToggle.setSelected(item.isTrackInstances());
+        cstmFieldToggle.setSelected(item.isTrackInstances());
+        quantSpinner.getEditor().setText(Integer.toString(item.getQuantity()));
+        priceSpinner.getEditor().setText(Double.toString(item.getPurchasePrice()));
+        purchaseDateSelector.setValue(item.getDate());
+    } // This will be used when the edit item form is opened, this is so that an item can be passed to it and prepopulate the form.
 
 
     // Button Actions --------------------------------------------------------------------------------------------------
     public void submit(ActionEvent event) {
-        String name = nameField.getText();
         String description = descriptionArea.getText();
         double price = priceSpinner.getValue();
         LocalDate date = purchaseDateSelector.getValue();
@@ -87,14 +100,10 @@ public class NewItemFormController extends DefaultController implements Initiali
         boolean trackInstances = instanceToggle.isSelected();
         int quantity = quantSpinner.getValue();
 
-        ValidationResult nameResult = Validator.name(name);
         ValidationResult descriptionResult = Validator.general(description);
         ValidationResult dateResult = Validator.date(date);
 
-        if (!nameResult.isValid()) {
-            errorLbl.setText(nameResult.getReason());
-            return;
-        } else if (!descriptionResult.isValid()) {
+        if (!descriptionResult.isValid()) {
             errorLbl.setText(descriptionResult.getReason());
             return;
         } else if (!dateResult.isValid()) {
@@ -102,11 +111,18 @@ public class NewItemFormController extends DefaultController implements Initiali
             return;
         }
 
-        Item newItem = new Item(name, description, trackInstances, customFields, price, date, quantity);
-        if (Inventory.addItem(newItem).isValid()) {
-            successPopup("Item successfully added", "Item successfully added");
+        Item editedItem = item.copyItem();
+        editedItem.setDescription(description);
+        editedItem.setPurchasePrice(price);
+        editedItem.setPurchaseDate(date);
+        editedItem.setTrackInstances(trackInstances);
+        editedItem.setCustomFields(customFields);
+        editedItem.setQuantity(quantity);
+
+        if (Inventory.editItem(editedItem).isValid()) {
+            successPopup("Item successfully edited", "Item successfully edited");
         } else {
-            errorLbl.setText("Item already exists! Pick another name.");
+            errorLbl.setText("Item does not exist!");
         }
     }
 
@@ -117,6 +133,19 @@ public class NewItemFormController extends DefaultController implements Initiali
             stage.close();
         }
     }
+
+    public void deleteItem(ActionEvent event) {
+        boolean confirmed = confirmationDialogue("Delete item", "This will permanently remove the item from the inventory.");
+        if (confirmed) {
+            Inventory.removeItem(item);
+            successPopup("Item Removed", "Item Successfully removed from inventory!");
+            Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
+            stage.close();
+        }
+    }
+
+
+
 
 
 }

@@ -215,10 +215,6 @@ public class Item {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public HashMap<Integer, ItemInstance> getInstances() {
         return instances;
     }
@@ -227,38 +223,42 @@ public class Item {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public LocalDate getDate() {
+        return purchaseDate;
     }
 
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
     public boolean isCustomFields() {
         return customFields;
     }
 
-    public void setCustomFields(boolean customFields) {
-        this.customFields = customFields;
+    public boolean isTrackInstances() {
+        return trackInstances;
     }
 
     // Setters ---------------------------------------------------------------------------------------------------------
 
-    public boolean isTrackInstances() {
-        return trackInstances;
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public void setTrackInstances(boolean trackInstances) {
         this.trackInstances = trackInstances;
     }
 
-    public double getPurchasePrice() {
-        return purchasePrice;
+    public void setCustomFields(boolean customFields) {
+        this.customFields = customFields;
     }
 
     public void setPurchasePrice(double purchasePrice) {
         this.purchasePrice = purchasePrice;
-    }
-
-    public LocalDate getDate() {
-        return purchaseDate;
     }
 
     public void setPurchaseDate(LocalDate purchaseDate) {

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="root" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventorymanagementsystem.nea.ims.Controllers.NewItemFormController">
+<AnchorPane fx:id="root" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventorymanagementsystem.nea.ims.Controllers.EditItemFormController">
     <Rectangle fx:id="backdrop" arcHeight="40.0" arcWidth="40.0" fill="DODGERBLUE" height="461.0" layoutX="50.0" layoutY="115.0" stroke="BLACK" strokeType="INSIDE" width="899.0" />
     <GridPane hgap="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" vgap="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <columnConstraints>
@@ -29,9 +29,9 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-            <Label fx:id="titleLbl" text="Add New Item" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
-            <Label styleClass="fieldLbl" text="Item Name*" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-            <TextField fx:id="nameField" prefHeight="35.0" prefWidth="236.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <Label fx:id="titleLbl" text="Edit Item" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
+            <Label styleClass="fieldLbl" text="Item Name" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+            <TextField fx:id="nameField" editable="false" prefHeight="35.0" prefWidth="236.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
@@ -99,6 +99,7 @@
                 </GridPane.margin>
             </DatePicker>
             <Label styleClass="fieldLbl" text="Purchase Date" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+         <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#deleteItem" prefHeight="40.0" prefWidth="98.0" text="Delete Item" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" />
         </children>
         <padding>
             <Insets bottom="70.0" left="70.0" right="70.0" top="50.0" />
