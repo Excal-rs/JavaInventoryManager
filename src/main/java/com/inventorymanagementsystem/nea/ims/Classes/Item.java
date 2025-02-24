@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class Item {
@@ -16,10 +15,11 @@ public class Item {
     private boolean trackInstances;
     private boolean customFields;
     private double purchasePrice;
-    private String purchaseDate;
+    private LocalDate purchaseDate;
     private int quantity;
     private HashMap<Integer, ItemInstance> instances;
 
+    // Constructors ----------------------------------------------------------------------------------------------------
     public Item(String name, String description, boolean trackInstances,
                 boolean customFields, int purchasePrice, long purchaseDate, int quantity) {
         this.name = name;
@@ -32,6 +32,16 @@ public class Item {
 
         this.quantity = quantity;
         updateInstances();
+    }
+
+    public Item(String name, String description, boolean trackInstances, boolean customFields, double purchasePrice, LocalDate purchaseDate, int quantity) {
+        this.name = name;
+        this.description = description;
+        this.trackInstances = trackInstances;
+        this.customFields = customFields;
+        this.purchasePrice = purchasePrice;
+        this.purchaseDate = purchaseDate;
+        this.quantity = quantity;
     }
 
     public Item(Item item) {
@@ -47,19 +57,12 @@ public class Item {
     // Used when copying items;
 
     // Misc ------------------------------------------------------------------------------------------------------------
-    public static long dateToUnix(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        Instant instant = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-        long unixTime = instant.getEpochSecond();
-
-        return unixTime;
+    public static long dateToUnix(LocalDate date) {
+        return date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
     }
 
-    private static String unixToDate(long unixTime) {
-        Instant instant = Instant.ofEpochSecond(unixTime);
-        String date = DateTimeFormatter.ofPattern("dd-MM-yyyy").withZone(ZoneId.systemDefault()).format(instant);
-        return date;
+    private static LocalDate unixToDate(long unixTime) {
+        return Instant.ofEpochSecond(unixTime).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public Item copyItem() {
@@ -254,11 +257,11 @@ public class Item {
         this.purchasePrice = purchasePrice;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(String purchaseDate) {
+    public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
 }

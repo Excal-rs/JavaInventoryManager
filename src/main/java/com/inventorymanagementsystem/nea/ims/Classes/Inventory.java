@@ -128,7 +128,7 @@ public class Inventory {
                 }
             }
 
-         // TODO: Implement Later when custom fields are properly implemented
+            // TODO: Implement Later when custom fields are properly implemented
 
             PreparedStatement editStatement = connection.prepareStatement("UPDATE items " +
                     "SET itemDescription = ?, " +

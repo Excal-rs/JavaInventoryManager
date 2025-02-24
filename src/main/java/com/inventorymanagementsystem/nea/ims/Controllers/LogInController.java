@@ -24,7 +24,7 @@ public class LogInController extends DefaultController {
     @FXML
     private Label errorLbl;
 
-    public void login(ActionEvent event) throws SQLException, NoSuchAlgorithmException {
+    public void login(ActionEvent event) throws SQLException, NoSuchAlgorithmException, IOException {
         String username = userField.getText();
         String password = passField.getText();
 
@@ -60,6 +60,7 @@ public class LogInController extends DefaultController {
                 }
                 User.setCurrentUser(results.getString("username"));
                 successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
+                switchToScene(event, "itemCreationForm.fxml", new String[] {"inventoryForms.css"}, "IMS - Add new Item");
             } else {
                 errorLbl.setText("User does not exist!");
             }
@@ -69,7 +70,7 @@ public class LogInController extends DefaultController {
 
     public void switchToSignup(ActionEvent event) {
         try {
-            switchToScene(event, "signup.fxml", new String[]{"styles/signup_login.css"}, "IMS - Sign Up");
+            switchToScene(event, "signup.fxml", new String[]{"signupLogin.css"}, "IMS - Sign Up");
         } catch (IOException e) {
             System.out.println("Change scene caused error");
         }

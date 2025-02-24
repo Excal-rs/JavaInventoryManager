@@ -1,5 +1,7 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.MainApplication;
+import com.sun.tools.javac.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,12 +20,12 @@ public class DefaultController {
     public FXMLLoader loader;
 
     public void switchToScene(ActionEvent event, String filename, String[] cssFiles, String windowTitle) throws IOException {
-        loader = new FXMLLoader(getClass().getResource(filename));
+        loader = new FXMLLoader(MainApplication.class.getResource("FXML/" + filename));
         // Gets the resource given
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(loader.load());
         for (String cssfile : cssFiles) {
-            scene.getStylesheets().add(getClass().getResource(cssfile).toExternalForm());
+            scene.getStylesheets().add(MainApplication.class.getResource("styles/" + cssfile).toExternalForm());
         }
         // Loads the FXML file and resources into the scene
 
@@ -34,12 +36,12 @@ public class DefaultController {
     }
 
     public void switchToScene(ActionEvent event, String filename, String[] cssFiles, String windowTitle, int width, int height) throws IOException {
-        loader = new FXMLLoader(getClass().getResource(filename));
+        loader = new FXMLLoader(MainApplication.class.getResource(filename));
         // Gets the resource given
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(loader.load());
         for (String cssFile : cssFiles) {
-            scene.getStylesheets().add(getClass().getResource(cssFile).toExternalForm());
+            scene.getStylesheets().add(MainApplication.class.getResource(cssFile).toExternalForm());
         }
         // Loads the FXML file and resources into the scene
 
@@ -51,7 +53,7 @@ public class DefaultController {
         // Scene switched and displayed
     }
 
-    public void successPopup(String title, String description) {
+    public void successPopup(String title, String description){
         Alert popup = new Alert(Alert.AlertType.INFORMATION);
         popup.setTitle(title);
         popup.setContentText(description);
@@ -61,14 +63,14 @@ public class DefaultController {
         // Shows the popup to user and wait until it is closed.
     }
 
-    public boolean confirmationDialogue(String title, String description) {
+    public boolean confirmationDialogue (String title, String description){
         Alert dialogue = new Alert(Alert.AlertType.CONFIRMATION);
         dialogue.setTitle(title);
         dialogue.setContentText(description);
         Optional<ButtonType> result = dialogue.showAndWait();
         if (result.isPresent()) {
             ButtonType buttonType = result.get();
-            if (buttonType == ButtonType.OK) {
+            if (buttonType == ButtonType.OK){
                 return true;
                 // User has confirmed so confirmation is true
             } else if (buttonType == ButtonType.CANCEL) {

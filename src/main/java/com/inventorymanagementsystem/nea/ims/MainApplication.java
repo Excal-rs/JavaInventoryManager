@@ -26,17 +26,17 @@ public class MainApplication extends Application {
         ResultSet results = statement.executeQuery("SELECT COUNT(*) FROM users");
         // Performs query to check if any users exist in local database
         if (results.next() && results.getInt(1) != 0) {
-            fxmlLoader = new FXMLLoader(MainApplication.class.getResource("login.fxml"));
+            fxmlLoader = new FXMLLoader(MainApplication.class.getResource("FXML/login.fxml"));
             title = "IMS - Log In";
         } else {
-            fxmlLoader = new FXMLLoader(MainApplication.class.getResource("signup.fxml"));
+            fxmlLoader = new FXMLLoader(MainApplication.class.getResource("FXML/signup.fxml"));
             title = "IMS - Sign Up";
         }
         connection.close();
         // Chooses which form to load
 
         Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(MainApplication.class.getResource("styles/signup_login.css").toExternalForm());
+        scene.getStylesheets().add(MainApplication.class.getResource("styles/signupLogin.css").toExternalForm());
 
         stage.setMinHeight(700);
         stage.setMinWidth(1000);

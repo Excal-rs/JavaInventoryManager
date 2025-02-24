@@ -5,6 +5,7 @@ module com.inventorymanagementsystem.nea.ims {
     requires javafx.graphics;
     requires javafx.base;
     requires java.desktop;
+    requires jdk.compiler;
 
 
     opens com.inventorymanagementsystem.nea.ims to javafx.fxml;

@@ -1,5 +1,6 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,11 +49,31 @@ public class Validator {
         return new ValidationResult(true);
     }
 
+    public static ValidationResult name(String string) {
+        if (string.length() > 25 || string.length() < 2) {
+            return new ValidationResult(false, "Name must be between 2 and 25 characters in length.");
+        }
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9_ -]+$");
+        Matcher matcher = pattern.matcher(string);
+        if (!matcher.matches()) {
+            return new ValidationResult(false, "Name can only contain alphanumeric _ and - characters. ");
+        }
+
+        return new ValidationResult(true);
+    }
+
+    public static ValidationResult date(LocalDate date) {
+        if (date.isAfter(LocalDate.now())) {
+            return new ValidationResult(false, "Date cannot be in the future!");
+        }
+        return new ValidationResult(true);
+    }
+
     public static ValidationResult general(String string) {
         if (string.length() > 250) {
             return new ValidationResult(false, "Description too long! Max 250 characters.");
         }
-        Pattern pattern = Pattern.compile("^[A-Za-z0-9!@#$%^:;&*_+=,.?/()-].+$");
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9!@#$%^:;&*_+=,.?/ ()-].+$");
         Matcher matcher = pattern.matcher(string);
         if (!matcher.matches()) {
             return new ValidationResult(false, "No Illegal characters!");
