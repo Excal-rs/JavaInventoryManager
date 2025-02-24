@@ -30,7 +30,7 @@ public class NewItemFormController extends DefaultController implements Initiali
     @FXML
     private ToggleButton instanceToggle;
     @FXML
-    private DatePicker purchaseDatePicker;
+    private DatePicker purchaseDateSelector;
     @FXML
     private Button submitBtn;
     @FXML
@@ -56,7 +56,7 @@ public class NewItemFormController extends DefaultController implements Initiali
         String name = nameField.getText();
         String description = descriptionArea.getText();
         double price = priceSpinner.getValue();
-        LocalDate date = purchaseDatePicker.getValue();
+        LocalDate date = purchaseDateSelector.getValue();
         boolean customFields = cstmFieldToggle.isSelected();
         boolean trackInstances = instanceToggle.isSelected();
         int quantity = quantSpinner.getValue();
