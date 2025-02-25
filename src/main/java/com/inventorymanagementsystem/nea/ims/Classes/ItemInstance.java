@@ -1,5 +1,7 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
+import java.sql.*;
+
 public class ItemInstance {
     private final Item item;
     private final int identifier;
@@ -13,6 +15,7 @@ public class ItemInstance {
         this.location = location;
     }
 
+    // Getters ---------------------------------------------------------------------------------------------------------
     public Item getItem() {
         return item;
     }

@@ -70,10 +70,10 @@ public class LogInController extends DefaultController {
                 loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItemForm.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(loader.load());
-                scene.getStylesheets().add("styles/inventoryForms.css");
+                scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
 
                 EditItemFormController controller = loader.getController();
-                controller.setItem(Inventory.getItems().get("TestItem"));
+                controller.setItem(Inventory.getItems().get("TestItem".toLowerCase()));
 
                 stage.setScene(scene);
                 stage.setTitle("IMS - edit item");

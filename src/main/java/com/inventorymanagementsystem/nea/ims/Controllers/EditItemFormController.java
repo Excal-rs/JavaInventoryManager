@@ -84,7 +84,7 @@ public class EditItemFormController extends DefaultController implements Initial
         nameField.setText(item.getName());
         descriptionArea.setText(item.getDescription());
         instanceToggle.setSelected(item.isTrackInstances());
-        cstmFieldToggle.setSelected(item.isTrackInstances());
+        cstmFieldToggle.setSelected(item.isCustomFields());
         quantSpinner.getEditor().setText(Integer.toString(item.getQuantity()));
         priceSpinner.getEditor().setText(Double.toString(item.getPurchasePrice()));
         purchaseDateSelector.setValue(item.getDate());
@@ -118,7 +118,7 @@ public class EditItemFormController extends DefaultController implements Initial
         editedItem.setTrackInstances(trackInstances);
         editedItem.setCustomFields(customFields);
         editedItem.setQuantity(quantity);
-
+        // TODO: add logic that when quantity is changes, instances are added
         if (Inventory.editItem(editedItem).isValid()) {
             successPopup("Item successfully edited", "Item successfully edited");
         } else {

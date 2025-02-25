@@ -1,13 +1,11 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Item {
     private final String name;
@@ -205,6 +203,21 @@ public class Item {
             throw new RuntimeException(e);
         }
     }
+
+    public int generateInstanceId() {
+        int largestKey = 0;
+        if (instances.isEmpty()){
+            return largestKey + 1;
+        }
+        for (Map.Entry<Integer, ItemInstance> entry : instances.entrySet()){
+            if (entry.getKey() > largestKey){
+                largestKey = entry.getKey();
+            }
+        }
+        // gets the current largest instance ID.
+        return largestKey + 1;
+    }
+
     // Getters ---------------------------------------------------------------------------------------------------------
 
     public String getName() {
