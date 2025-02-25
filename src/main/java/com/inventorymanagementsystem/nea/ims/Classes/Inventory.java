@@ -107,8 +107,9 @@ public class Inventory {
         }
         try {
             Connection connection = DriverManager.getConnection(url);
+            Item oldItem = items.get(item.getName().toLowerCase());
 
-            if (items.get(item.getName().toLowerCase()).isTrackInstances() ^ item.isTrackInstances()) {
+            if (oldItem.isTrackInstances() ^ item.isTrackInstances()) {
                 if (!item.isTrackInstances()) {
                     PreparedStatement deleteInstancesStatement = connection.prepareStatement("DELETE FROM itemInstances " +
                             "WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
@@ -127,6 +128,20 @@ public class Inventory {
                     }
                 }
             }
+            //  Handle change of instance value by either removing all instances or generating instances.
+
+            if (item.isTrackInstances() && oldItem.isTrackInstances() && oldItem.getQuantity() < item.getQuantity()) {
+                PreparedStatement generateInstancesStatement = connection.prepareStatement("INSERT INTO itemInstances (userID, itemID, instanceID) " +
+                        "VALUES (?,?,?);");
+                generateInstancesStatement.setString(1, User.getUsername());
+                generateInstancesStatement.setString(2, item.getName());
+                int firstIdentifier = item.generateInstanceId();
+                for (int i = 0; i < item.getQuantity() - oldItem.getQuantity(); i++) {
+                    generateInstancesStatement.setInt(3, i + firstIdentifier);
+                    generateInstancesStatement.executeUpdate();
+                }
+            } // Adds new instances if quantity has changed and item had instances previously
+
 
             // TODO: Implement Later when custom fields are properly implemented
 

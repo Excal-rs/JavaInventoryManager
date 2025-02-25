@@ -79,7 +79,7 @@ public class EditItemFormController extends DefaultController implements Initial
         // Validate Inputs for price spinner
     }
 
-    public void setItem(Item item){
+    public void setItem(Item item) {
         this.item = item;
         nameField.setText(item.getName());
         descriptionArea.setText(item.getDescription());
@@ -88,6 +88,13 @@ public class EditItemFormController extends DefaultController implements Initial
         quantSpinner.getEditor().setText(Integer.toString(item.getQuantity()));
         priceSpinner.getEditor().setText(Double.toString(item.getPurchasePrice()));
         purchaseDateSelector.setValue(item.getDate());
+
+        if (item.isTrackInstances()) {
+            int quantity = item.getQuantity();
+            SpinnerValueFactory.IntegerSpinnerValueFactory quantValueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) quantSpinner.getValueFactory();
+            quantValueFactory.setMin(quantity);
+        }
+        // Updates the minimum value to be the current quantity, this is so that instances which may contain important information are not deleted.
     } // This will be used when the edit item form is opened, this is so that an item can be passed to it and prepopulate the form.
 
 
@@ -118,7 +125,7 @@ public class EditItemFormController extends DefaultController implements Initial
         editedItem.setTrackInstances(trackInstances);
         editedItem.setCustomFields(customFields);
         editedItem.setQuantity(quantity);
-        // TODO: add logic that when quantity is changes, instances are added
+
         if (Inventory.editItem(editedItem).isValid()) {
             successPopup("Item successfully edited", "Item successfully edited");
         } else {
@@ -143,9 +150,6 @@ public class EditItemFormController extends DefaultController implements Initial
             stage.close();
         }
     }
-
-
-
 
 
 }

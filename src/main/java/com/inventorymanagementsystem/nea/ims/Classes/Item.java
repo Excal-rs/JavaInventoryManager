@@ -1,6 +1,9 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -206,11 +209,11 @@ public class Item {
 
     public int generateInstanceId() {
         int largestKey = 0;
-        if (instances.isEmpty()){
+        if (instances.isEmpty()) {
             return largestKey + 1;
         }
-        for (Map.Entry<Integer, ItemInstance> entry : instances.entrySet()){
-            if (entry.getKey() > largestKey){
+        for (Map.Entry<Integer, ItemInstance> entry : instances.entrySet()) {
+            if (entry.getKey() > largestKey) {
                 largestKey = entry.getKey();
             }
         }
@@ -228,12 +231,20 @@ public class Item {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public HashMap<Integer, ItemInstance> getInstances() {
         return instances;
     }
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public LocalDate getDate() {
@@ -243,35 +254,27 @@ public class Item {
     public double getPurchasePrice() {
         return purchasePrice;
     }
-    public boolean isCustomFields() {
-        return customFields;
-    }
-
-    public boolean isTrackInstances() {
-        return trackInstances;
-    }
 
     // Setters ---------------------------------------------------------------------------------------------------------
 
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setTrackInstances(boolean trackInstances) {
-        this.trackInstances = trackInstances;
+    public boolean isCustomFields() {
+        return customFields;
     }
 
     public void setCustomFields(boolean customFields) {
         this.customFields = customFields;
     }
 
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
+    public boolean isTrackInstances() {
+        return trackInstances;
+    }
+
+    public void setTrackInstances(boolean trackInstances) {
+        this.trackInstances = trackInstances;
     }
 
     public void setPurchaseDate(LocalDate purchaseDate) {

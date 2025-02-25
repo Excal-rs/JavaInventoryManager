@@ -1,7 +1,5 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
-import java.sql.*;
-
 public class ItemInstance {
     private final Item item;
     private final int identifier;

@@ -66,7 +66,7 @@ public class LogInController extends DefaultController {
                 }
                 User.setCurrentUser(results.getString("username"));
                 successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
-
+//                switchToScene(event, "newItemForm.fxml", new String[] {"inventoryForms.css"}, "IMS - Add New Item");
                 loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItemForm.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(loader.load());
