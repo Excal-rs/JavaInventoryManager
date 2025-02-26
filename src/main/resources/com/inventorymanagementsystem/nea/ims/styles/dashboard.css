@@ -1,0 +1,91 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-base-colour: #383896;
+    -fx-background-color: -fx-base-colour;
+}
+
+.infoContainer {
+    -fx-fill: #FAFAFA;
+    -fx-stroke-width: 0;
+}
+
+.infoTitle {
+    -fx-font-weight: bold;
+}
+
+.infoValue {
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+}
+
+/* TableView Background */
+.table-view {
+    -fx-text-fill: BLACK;
+    -fx-background-color: #FAFAFA;  /* Light grey background */
+    -fx-padding: 0;                 /* No padding */
+}
+
+/* Column Header Background */
+.table-view .column-header {
+    -fx-background-color: LIGHTGREY;      /* Red background for header */
+}
+
+/* Text styling in the column header */
+.table-view .column-header-background .label {
+    -fx-font-weight: bold;          /* Bold text */
+}
+
+/* Table Cell Text */
+.table-view .table-cell .label {
+    -fx-text-fill: BLACK;           /* Black text color for the cell */
+    -fx-font-size: 14px;            /* Font size */
+}
+
+/* Add padding and style for the table cell content */
+.table-view .table-cell .text {
+    -fx-text-fill: black;           /* Ensure text inside the cell is black */
+    -fx-font-size: 14px;            /* Set font size for better visibility */
+}
+
+/* Style for selected rows (highlighted rows) */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #3399FF;  /* Highlight color for selected row */
+    -fx-text-fill: white;           /* White text for selected row */
+}
+
+
+#titleLbl {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: WHITE;
+}
+
+Button, TextField{
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-height: 36;
+}
+
+Button, #addItemBtn:pressed{
+  -fx-background-color: -fx-base-colour;
+  -fx-font-weight: bold;
+  -fx-text-fill: WHITE;
+  -fx-border-width: 2;
+  -fx-border-color: WHITE;
+}
+
+Button:pressed, #addItemBtn {
+  -fx-background-color: WHITE;
+  -fx-text-fill: -fx-base-colour;
+}
+
+Button:pressed, #addItemBtn:pressed {
+  -fx-cursor: closed-hand;
+}
+
+Button:hover, #addItembtn:hover {
+  -fx-cursor: hand;
+  -fx-opacity: 0.8;
+}
+
+

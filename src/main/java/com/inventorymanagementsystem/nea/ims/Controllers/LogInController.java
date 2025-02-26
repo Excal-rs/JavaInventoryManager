@@ -66,18 +66,8 @@ public class LogInController extends DefaultController {
                 }
                 User.setCurrentUser(results.getString("username"));
                 successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
-//                switchToScene(event, "newItemForm.fxml", new String[] {"inventoryForms.css"}, "IMS - Add New Item");
-                loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItemForm.fxml"));
-                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                scene = new Scene(loader.load());
-                scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
+                switchToScene(event, "dashboard.fxml", new String[] {"dashboard.css"}, "IMS - Dashboard", 1280, 800);
 
-                EditItemFormController controller = loader.getController();
-                controller.setItem(Inventory.getItems().get("TestItem".toLowerCase()));
-
-                stage.setScene(scene);
-                stage.setTitle("IMS - edit item");
-                stage.show();
             } else {
                 errorLbl.setText("User does not exist!");
             }

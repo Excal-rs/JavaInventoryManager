@@ -51,7 +51,7 @@ public class Item {
         this.trackInstances = item.isTrackInstances();
         this.customFields = item.isCustomFields();
         this.purchasePrice = item.getPurchasePrice();
-        this.purchaseDate = item.getDate();
+        this.purchaseDate = item.getPurchaseDate();
         this.quantity = item.getQuantity();
         this.instances = item.getInstances();
     }
@@ -231,10 +231,6 @@ public class Item {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public HashMap<Integer, ItemInstance> getInstances() {
         return instances;
     }
@@ -243,11 +239,7 @@ public class Item {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public LocalDate getDate() {
+    public LocalDate getPurchaseDate() {
         return purchaseDate;
     }
 
@@ -255,22 +247,27 @@ public class Item {
         return purchasePrice;
     }
 
-    // Setters ---------------------------------------------------------------------------------------------------------
-
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
+    public boolean isTrackInstances() {
+        return trackInstances;
     }
 
     public boolean isCustomFields() {
         return customFields;
     }
 
-    public void setCustomFields(boolean customFields) {
-        this.customFields = customFields;
+
+    // Setters ---------------------------------------------------------------------------------------------------------
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public boolean isTrackInstances() {
-        return trackInstances;
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public void setCustomFields(boolean customFields) {
+        this.customFields = customFields;
     }
 
     public void setTrackInstances(boolean trackInstances) {
@@ -279,5 +276,9 @@ public class Item {
 
     public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

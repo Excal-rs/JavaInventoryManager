@@ -87,7 +87,7 @@ public class EditItemFormController extends DefaultController implements Initial
         cstmFieldToggle.setSelected(item.isCustomFields());
         quantSpinner.getEditor().setText(Integer.toString(item.getQuantity()));
         priceSpinner.getEditor().setText(Double.toString(item.getPurchasePrice()));
-        purchaseDateSelector.setValue(item.getDate());
+        purchaseDateSelector.setValue(item.getPurchaseDate());
 
         if (item.isTrackInstances()) {
             int quantity = item.getQuantity();

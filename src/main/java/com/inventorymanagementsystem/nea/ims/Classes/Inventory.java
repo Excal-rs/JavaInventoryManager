@@ -48,7 +48,7 @@ public class Inventory {
             insertStatement.setString(3, item.getDescription());
             insertStatement.setInt(4, item.getQuantity());
             insertStatement.setInt(5, (int) item.getPurchasePrice() * 100);
-            insertStatement.setLong(6, Item.dateToUnix(item.getDate()));
+            insertStatement.setLong(6, Item.dateToUnix(item.getPurchaseDate()));
             insertStatement.setBoolean(7, item.isTrackInstances());
             insertStatement.setBoolean(8, item.isCustomFields());
 
@@ -156,7 +156,7 @@ public class Inventory {
             editStatement.setString(1, item.getDescription());
             editStatement.setInt(2, item.getQuantity());
             editStatement.setInt(3, (int) item.getPurchasePrice() * 100);
-            editStatement.setLong(4, Item.dateToUnix(item.getDate()));
+            editStatement.setLong(4, Item.dateToUnix(item.getPurchaseDate()));
             editStatement.setBoolean(5, item.isTrackInstances());
             editStatement.setBoolean(6, item.isCustomFields());
             editStatement.setString(7, User.getUsername());

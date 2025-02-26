@@ -40,6 +40,8 @@ public class NewItemFormController extends DefaultController implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
         SpinnerValueFactory.IntegerSpinnerValueFactory quantValueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999, 1, 1);
         quantSpinner.setValueFactory(quantValueFactory);

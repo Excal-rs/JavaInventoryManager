@@ -66,23 +66,25 @@ public class DefaultController {
         // Scene switched and displayed
     }
 
-    public void switchToScene(ActionEvent event, String filename, String[] cssFiles, String windowTitle, int width, int height) throws IOException {
-        loader = new FXMLLoader(MainApplication.class.getResource(filename));
+    public void switchToScene(ActionEvent event, String filename, String[] cssFiles, String windowTitle, double width, double height) throws IOException {
+        loader = new FXMLLoader(MainApplication.class.getResource("FXML/" + filename));
         // Gets the resource given
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(loader.load());
-        for (String cssFile : cssFiles) {
-            scene.getStylesheets().add(MainApplication.class.getResource(cssFile).toExternalForm());
+        for (String cssfile : cssFiles) {
+            scene.getStylesheets().add(MainApplication.class.getResource("styles/" + cssfile).toExternalForm());
         }
         // Loads the FXML file and resources into the scene
 
         stage.setTitle(windowTitle);
+        stage.setScene(scene);
         stage.setWidth(width);
         stage.setHeight(height);
-        stage.setScene(scene);
         stage.show();
-        // Scene switched and displayed
+        // Scene switched and displayed with custom size
     }
+
+
 
     public void successPopup(String title, String description) {
         Alert popup = new Alert(Alert.AlertType.INFORMATION);
