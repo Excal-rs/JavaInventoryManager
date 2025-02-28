@@ -42,6 +42,10 @@ public class DashboardController extends DefaultController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         initialiseTable();
         setUpContextMenu();
+        // Sets up table
+
+        totalPriceLbl.setText(String.format("£%.2f", Inventory.getTotalInventoryValue()));
+        totalQuantLbl.setText(Integer.toString(Inventory.getInventoryQuantity()));
     }
 
     // Table Related Methods -----------------------------------------------------------------------------------------------------

@@ -1,5 +1,8 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -169,6 +172,25 @@ public class Inventory {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Report generation -----------------------------------------------------------------------------------------------
+    public static double getTotalInventoryValue(){
+        ObservableList<Item> itemList = FXCollections.observableArrayList(items.values());
+        double sum = 0;
+        for (Item item : itemList) {
+            sum += item.getPurchasePrice() * item.getQuantity();
+        }
+        return sum;
+    }
+
+    public static int getInventoryQuantity(){
+        ObservableList<Item> itemList = FXCollections.observableArrayList(items.values());
+        int sum = 0;
+        for (Item item : itemList) {
+            sum += item.getQuantity();
+        }
+        return sum;
     }
 
     // Getters ---------------------------------------------------------------------------------------------------------
