@@ -11,12 +11,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class EditItemFormController extends DefaultController implements Initializable {
+public class EditItemController extends DefaultController implements Initializable {
     @FXML
     private Spinner<Integer> quantSpinner;
     @FXML
@@ -133,7 +132,7 @@ public class EditItemFormController extends DefaultController implements Initial
         }
     }
 
-    public void closeForm(ActionEvent event) throws IOException {
+    public void closeForm(ActionEvent event) {
         boolean confirmed = confirmationDialogue("Close Form", "Are you sure you want to do this, any unsaved work will be lost?");
         if (confirmed) {
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());

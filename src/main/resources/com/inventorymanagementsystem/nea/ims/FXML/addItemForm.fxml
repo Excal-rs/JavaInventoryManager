@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="700.0" prefWidth="1000.0"
             xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="com.inventorymanagementsystem.nea.ims.Controllers.NewItemFormController">
+            fx:controller="com.inventorymanagementsystem.nea.ims.Controllers.NewItemController">
     <Rectangle fx:id="backdrop" arcHeight="40.0" arcWidth="40.0" fill="DODGERBLUE" height="461.0" layoutX="50.0"
                layoutY="115.0" stroke="BLACK" strokeType="INSIDE" width="899.0"/>
     <GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="100.0" maxHeight="-Infinity" maxWidth="-Infinity"

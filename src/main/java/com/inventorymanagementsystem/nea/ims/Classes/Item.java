@@ -45,6 +45,7 @@ public class Item {
         this.quantity = quantity;
     }
 
+    // Used when copying items;
     public Item(Item item) {
         this.name = item.getName();
         this.description = item.getDescription();
@@ -55,7 +56,6 @@ public class Item {
         this.quantity = item.getQuantity();
         this.instances = item.getInstances();
     }
-    // Used when copying items;
 
     // Misc ------------------------------------------------------------------------------------------------------------
     public static long dateToUnix(LocalDate date) {
@@ -67,8 +67,7 @@ public class Item {
     }
 
     public Item copyItem() {
-        Item newItem = new Item(this);
-        return newItem;
+        return new Item(this);
     }
 
     // Instance Management ---------------------------------------------------------------------------------------------
@@ -231,6 +230,10 @@ public class Item {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public HashMap<Integer, ItemInstance> getInstances() {
         return instances;
     }
@@ -239,46 +242,42 @@ public class Item {
         return quantity;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public LocalDate getPurchaseDate() {
         return purchaseDate;
-    }
-
-    public double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public boolean isTrackInstances() {
-        return trackInstances;
-    }
-
-    public boolean isCustomFields() {
-        return customFields;
-    }
-
-
-    // Setters ---------------------------------------------------------------------------------------------------------
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-
-    public void setCustomFields(boolean customFields) {
-        this.customFields = customFields;
-    }
-
-    public void setTrackInstances(boolean trackInstances) {
-        this.trackInstances = trackInstances;
     }
 
     public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+
+    // Setters ---------------------------------------------------------------------------------------------------------
+
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public boolean isTrackInstances() {
+        return trackInstances;
+    }
+
+    public void setTrackInstances(boolean trackInstances) {
+        this.trackInstances = trackInstances;
+    }
+
+    public boolean isCustomFields() {
+        return customFields;
+    }
+
+    public void setCustomFields(boolean customFields) {
+        this.customFields = customFields;
     }
 }

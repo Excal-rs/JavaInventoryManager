@@ -61,6 +61,7 @@ public class DefaultController {
         // Loads the FXML file and resources into the scene
 
         stage.setTitle(windowTitle);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
         // Scene switched and displayed
@@ -80,10 +81,10 @@ public class DefaultController {
         stage.setScene(scene);
         stage.setWidth(width);
         stage.setHeight(height);
+        stage.setResizable(false);
         stage.show();
         // Scene switched and displayed with custom size
     }
-
 
 
     public void successPopup(String title, String description) {

@@ -33,9 +33,15 @@ public class User {
         return username;
     }
 
+    public static void setUsername(String username) {
+        User.username = username;
+    }
+
     public static String getName() {
         return name;
     }
 
-
+    public static void setName(String name) {
+        User.name = name;
+    }
 }

@@ -83,7 +83,7 @@ Button:pressed, #addItemBtn:pressed {
   -fx-cursor: closed-hand;
 }
 
-Button:hover, #addItembtn:hover {
+Button:hover, #addItemBtn:hover {
   -fx-cursor: hand;
   -fx-opacity: 0.8;
 }
