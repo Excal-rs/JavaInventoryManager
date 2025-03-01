@@ -16,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -82,7 +81,7 @@ public class DashboardController extends DefaultController implements Initializa
             TableColumn<Item, Boolean> customFieldsColumn = new TableColumn<>("Custom Fields");
             customFieldsColumn.setCellValueFactory(new PropertyValueFactory<>("customFields"));
 
-            boolean b = itemsTable.getColumns().addAll(nameColumn, descriptionColumn, quantityColumn, priceColumn, dateColumn, trackInstancesColumn, customFieldsColumn);
+            itemsTable.getColumns().addAll(nameColumn, descriptionColumn, quantityColumn, priceColumn, dateColumn, trackInstancesColumn, customFieldsColumn);
         }
 
         // Set items in the TableView
@@ -118,7 +117,7 @@ public class DashboardController extends DefaultController implements Initializa
 
                 stage.setScene(scene);
                 stage.showAndWait();
-                itemsTable.refresh();
+                refreshInfo();
                 // Creates new window
             } catch (Exception exception) {
                 throw new RuntimeException();
@@ -131,7 +130,9 @@ public class DashboardController extends DefaultController implements Initializa
             boolean confirmed = confirmationDialogue("Delete Item", "Are you sure you want to delete this item?");
             if (confirmed) {
                 Inventory.removeItem(selectedItem);
-                itemsTable.getItems().remove(selectedItem);
+                refreshInfo();
+                successPopup("Item Removed", "Item successfully removed from inventory!");
+                // Removes item from inventory
             }
         });
 
@@ -140,7 +141,7 @@ public class DashboardController extends DefaultController implements Initializa
         // Adds the context menu to the table
     }
 
-    public void searchTable(ActionEvent event) {
+    public void searchTable() {
         String search = searchField.getText().toLowerCase();
         ObservableList<Item> items = FXCollections.observableArrayList(Inventory.getItems().values());
         // Gets search query and items in table
@@ -156,8 +157,16 @@ public class DashboardController extends DefaultController implements Initializa
         // Adds items to the table if they match the search query
     }
 
+    public void refreshInfo() {
+        totalPriceLbl.setText(String.format("£%.2f", Inventory.getTotalInventoryValue()));
+        totalQuantLbl.setText(Integer.toString(Inventory.getInventoryQuantity()));
+
+        searchTable();
+        // Refreshes the table and report section
+    }
+
     // Form Navigation -------------------------------------------------------------------------------------------------
-    public void switchToAddItemScene(ActionEvent event) {
+    public void switchToAddItemScene() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/addItemForm.fxml"));
             Scene scene = new Scene(loader.load());
@@ -176,7 +185,7 @@ public class DashboardController extends DefaultController implements Initializa
 
             stage.setScene(scene);
             stage.showAndWait();
-            itemsTable.refresh();
+            refreshInfo();
         } catch (Exception e) {
             throw new RuntimeException();
         }

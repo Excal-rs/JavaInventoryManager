@@ -56,11 +56,11 @@ public class EditItemController extends DefaultController implements Initializab
         TextField quantField = quantSpinner.getEditor();
         quantField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (!newValue) {
-                validateIntSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
+                Validator.intSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
             }
         }));
         quantField.setOnAction(event -> {
-            validateIntSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
+            Validator.intSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
             event.consume();
         });
         // Validate Inputs for quantity spinner
@@ -68,11 +68,11 @@ public class EditItemController extends DefaultController implements Initializab
         TextField priceField = priceSpinner.getEditor();
         priceField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (!newValue) {
-                validateDoubleSpinners(priceField, priceValueFactory.getMin(), priceValueFactory.getMax());
+                Validator.doubleSpinners(priceField, priceValueFactory.getMin(), priceValueFactory.getMax());
             }
         }));
         priceField.setOnAction(event -> {
-            validateDoubleSpinners(priceField, priceValueFactory.getMin(), priceValueFactory.getMax());
+            Validator.doubleSpinners(priceField, priceValueFactory.getMin(), priceValueFactory.getMax());
             event.consume();
         });
         // Validate Inputs for price spinner
@@ -125,10 +125,13 @@ public class EditItemController extends DefaultController implements Initializab
         editedItem.setCustomFields(customFields);
         editedItem.setQuantity(quantity);
 
+        Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
         if (Inventory.editItem(editedItem).isValid()) {
             successPopup("Item successfully edited", "Item successfully edited");
+            stage.close();
         } else {
             errorLbl.setText("Item does not exist!");
+            stage.close();
         }
     }
 

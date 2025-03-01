@@ -1,5 +1,7 @@
 package com.inventorymanagementsystem.nea.ims.Classes;
 
+import javafx.scene.control.TextField;
+
 import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,5 +82,36 @@ public class Validator {
         }
 
         return new ValidationResult(true);
+    }
+
+    public static void intSpinners(TextField field, int min, int max) {
+        String value = field.getText();
+        try {
+            int parsedValue = (int) Double.parseDouble(value);
+            if (parsedValue > max) {
+                field.setText(Integer.toString(max));
+            } else if (parsedValue < min) {
+                field.setText(Integer.toString(min));
+            } else {
+                field.setText(Integer.toString(parsedValue));
+            }
+        } catch (Exception e) {
+            field.setText(Integer.toString(min));
+        }
+
+    }
+
+    public static void doubleSpinners(TextField field, double min, double max) {
+        try {
+            String value = field.getText();
+            double integerValue = Double.parseDouble(value);
+            if (integerValue > max) {
+                field.setText(Double.toString(max));
+            } else if (integerValue < min) {
+                field.setText(Double.toString(min));
+            }
+        } catch (Exception e) {
+            field.setText(Double.toString(min));
+        }
     }
 }

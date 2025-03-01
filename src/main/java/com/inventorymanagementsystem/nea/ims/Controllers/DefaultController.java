@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,37 +17,6 @@ public class DefaultController {
     public Stage stage;
     public Scene scene;
     public FXMLLoader loader;
-
-    public static void validateIntSpinners(TextField field, int min, int max) {
-        String value = field.getText();
-        try {
-            int parsedValue = (int) Double.parseDouble(value);
-            if (parsedValue > max) {
-                field.setText(Integer.toString(max));
-            } else if (parsedValue < min) {
-                field.setText(Integer.toString(min));
-            } else {
-                field.setText(Integer.toString(parsedValue));
-            }
-        } catch (Exception e) {
-            field.setText(Integer.toString(min));
-        }
-
-    }
-
-    public static void validateDoubleSpinners(TextField field, double min, double max) {
-        try {
-            String value = field.getText();
-            double integerValue = Double.parseDouble(value);
-            if (integerValue > max) {
-                field.setText(Double.toString(max));
-            } else if (integerValue < min) {
-                field.setText(Double.toString(min));
-            }
-        } catch (Exception e) {
-            field.setText(Double.toString(min));
-        }
-    }
 
     public void switchToScene(ActionEvent event, String filename, String[] cssFiles, String windowTitle) throws IOException {
         loader = new FXMLLoader(MainApplication.class.getResource("FXML/" + filename));
@@ -81,6 +49,10 @@ public class DefaultController {
         stage.setScene(scene);
         stage.setWidth(width);
         stage.setHeight(height);
+        stage.setMinHeight(height);
+        stage.setMinWidth(width);
+        stage.setMaxHeight(height);
+        stage.setMaxWidth(width);
         stage.setResizable(false);
         stage.show();
         // Scene switched and displayed with custom size

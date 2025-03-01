@@ -39,8 +39,6 @@ public class NewItemController extends DefaultController implements Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
         SpinnerValueFactory.IntegerSpinnerValueFactory quantValueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999, 1, 1);
         quantSpinner.setValueFactory(quantValueFactory);
@@ -54,11 +52,11 @@ public class NewItemController extends DefaultController implements Initializabl
         TextField quantField = quantSpinner.getEditor();
         quantField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (!newValue) {
-                validateIntSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
+                Validator.intSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
             }
         }));
         quantField.setOnAction(event -> {
-            validateIntSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
+            Validator.intSpinners(quantField, quantValueFactory.getMin(), quantValueFactory.getMax());
             event.consume();
         });
         // Validate Inputs for quantity spinner
@@ -66,11 +64,11 @@ public class NewItemController extends DefaultController implements Initializabl
         TextField priceField = priceSpinner.getEditor();
         priceField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (!newValue) {
-                validateDoubleSpinners(priceField, (int) priceValueFactory.getMin(), (int) priceValueFactory.getMax());
+                Validator.doubleSpinners(priceField, (int) priceValueFactory.getMin(), (int) priceValueFactory.getMax());
             }
         }));
         priceField.setOnAction(event -> {
-            validateDoubleSpinners(priceField, (int) priceValueFactory.getMin(), (int) priceValueFactory.getMax());
+            Validator.doubleSpinners(priceField, (int) priceValueFactory.getMin(), (int) priceValueFactory.getMax());
             event.consume();
         });
         // Validate Inputs for price spinner
@@ -104,8 +102,10 @@ public class NewItemController extends DefaultController implements Initializabl
         }
 
         Item newItem = new Item(name, description, trackInstances, customFields, price, date, quantity);
+        Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
         if (Inventory.addItem(newItem).isValid()) {
             successPopup("Item successfully added", "Item successfully added");
+            stage.close();
         } else {
             errorLbl.setText("Item already exists! Pick another name.");
         }
