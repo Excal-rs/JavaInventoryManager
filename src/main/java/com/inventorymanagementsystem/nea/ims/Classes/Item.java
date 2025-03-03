@@ -256,6 +256,10 @@ public class Item {
         this.purchaseDate = purchaseDate;
     }
 
+    public double getTotalValue() {
+        return quantity * purchasePrice;
+    }
+
 
     // Setters ---------------------------------------------------------------------------------------------------------
 
