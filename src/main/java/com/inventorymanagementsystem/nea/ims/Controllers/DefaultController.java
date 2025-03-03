@@ -88,4 +88,11 @@ public class DefaultController {
         // User closed popup so confirmation not confirmed
     }
 
+    public void closeForm(ActionEvent event) {
+        boolean confirmed = confirmationDialogue("Close Form", "Are you sure you want to do this, any unsaved work will be lost?");
+        if (confirmed) {
+            Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
+            stage.close();
+        }
+    }
 }

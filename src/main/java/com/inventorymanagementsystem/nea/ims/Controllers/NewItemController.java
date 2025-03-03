@@ -11,11 +11,12 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class NewItemController extends DefaultController implements Initializable {
+public class NewItemController extends DefaultController implements Initializable, Submittable {
     @FXML
     private Spinner<Integer> quantSpinner;
     @FXML
@@ -77,6 +78,7 @@ public class NewItemController extends DefaultController implements Initializabl
 
 
     // Button Actions --------------------------------------------------------------------------------------------------
+    @Override
     public void submit(ActionEvent event) {
         String name = nameField.getText();
         String description = descriptionArea.getText();
@@ -111,13 +113,8 @@ public class NewItemController extends DefaultController implements Initializabl
         }
     }
 
-    public void closeForm(ActionEvent event) {
-        boolean confirmed = confirmationDialogue("Close Form", "Are you sure you want to do this, any unsaved work will be lost?");
-        if (confirmed) {
-            Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
-            stage.close();
-        }
+    public void cancel(ActionEvent event) {
+        closeForm(event);
     }
-
 
 }

@@ -30,7 +30,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                     </GridPane.margin>
                 </TableView>
-                <Button fx:id="addItemBtn" mnemonicParsing="false" onAction="#switchToAddItemScene" text="Add Item"
+                <Button fx:id="addItemBtn" mnemonicParsing="false" onAction="#openAddItemScene" text="Add Item"
                         GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>

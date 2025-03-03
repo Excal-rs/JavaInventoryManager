@@ -145,9 +145,9 @@ public class Item {
         }
     }
 
-    public void removeInstance(ItemInstance instance) {
+    public ValidationResult removeInstance(ItemInstance instance) {
         if (!trackInstances) {
-            return;
+            return new ValidationResult(false, "Item set to not track instances!");
         }
         try {
             String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
@@ -171,14 +171,15 @@ public class Item {
             quantity--;
             Inventory.editItem(this);
             instances.remove(instance.getIdentifier());
+            return new ValidationResult(true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void editInstance(ItemInstance instance) {
+    public ValidationResult editInstance(ItemInstance instance) {
         if (!trackInstances) {
-            return;
+            return new ValidationResult(false, "Item set to not track instances!");
         }
         try {
             String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
@@ -201,6 +202,7 @@ public class Item {
             // Performs update
 
             instances.put(instance.getIdentifier(), instance);
+            return new ValidationResult(true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

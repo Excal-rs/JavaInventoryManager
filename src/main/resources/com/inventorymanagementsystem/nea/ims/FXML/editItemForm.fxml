@@ -52,7 +52,7 @@
                     text="Submit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4"
                     GridPane.valignment="BOTTOM"/>
 
-            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#closeForm" prefHeight="41.0" prefWidth="96.0"
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel" prefHeight="41.0" prefWidth="96.0"
                     text="Cancel" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM"/>
             <Label fx:id="errorLbl" prefHeight="100.0" prefWidth="439.0" GridPane.columnIndex="1"/>
             <GridPane GridPane.rowIndex="2">

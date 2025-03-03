@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -166,7 +167,7 @@ public class DashboardController extends DefaultController implements Initializa
     }
 
     // Form Navigation -------------------------------------------------------------------------------------------------
-    public void switchToAddItemScene() {
+    public void openAddItemScene() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/addItemForm.fxml"));
             Scene scene = new Scene(loader.load());
@@ -203,6 +204,7 @@ public class DashboardController extends DefaultController implements Initializa
             throw new RuntimeException();
         }
     }
+
 
 
 }

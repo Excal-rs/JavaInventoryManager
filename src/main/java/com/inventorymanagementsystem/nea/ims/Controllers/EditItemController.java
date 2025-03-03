@@ -15,7 +15,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class EditItemController extends DefaultController implements Initializable {
+public class EditItemController extends DefaultController implements Initializable, Submittable {
     @FXML
     private Spinner<Integer> quantSpinner;
     @FXML
@@ -79,7 +79,7 @@ public class EditItemController extends DefaultController implements Initializab
     }
 
     public void setItem(Item item) {
-        this.item = item;
+        this.item = item.copyItem();
         nameField.setText(item.getName());
         descriptionArea.setText(item.getDescription());
         instanceToggle.setSelected(item.isTrackInstances());
@@ -98,6 +98,7 @@ public class EditItemController extends DefaultController implements Initializab
 
 
     // Button Actions --------------------------------------------------------------------------------------------------
+    @Override
     public void submit(ActionEvent event) {
         String description = descriptionArea.getText();
         double price = priceSpinner.getValue();
@@ -135,14 +136,6 @@ public class EditItemController extends DefaultController implements Initializab
         }
     }
 
-    public void closeForm(ActionEvent event) {
-        boolean confirmed = confirmationDialogue("Close Form", "Are you sure you want to do this, any unsaved work will be lost?");
-        if (confirmed) {
-            Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
-            stage.close();
-        }
-    }
-
     public void deleteItem(ActionEvent event) {
         boolean confirmed = confirmationDialogue("Delete item", "This will permanently remove the item from the inventory.");
         if (confirmed) {
@@ -153,5 +146,8 @@ public class EditItemController extends DefaultController implements Initializab
         }
     }
 
+    public void cancel(ActionEvent event){
+        closeForm(event);
+    }
 
 }
