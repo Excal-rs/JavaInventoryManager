@@ -30,21 +30,21 @@ public class ViewItemController extends DefaultController {
 
     private Item item;
 
-    public void setItem(Item givenItem) {
-        this.item = givenItem;
-        nameField.setText(item.getName());
-        descriptionArea.setText(item.getDescription());
-        quantSpinner.getValueFactory().setValue(item.getQuantity());
-        priceSpinner.getValueFactory().setValue(item.getPurchasePrice());
-        purchaseDateSelector.setValue(item.getPurchaseDate());
-        instanceToggle.setSelected(item.isTrackInstances());
-        cstmFieldToggle.setSelected(item.isCustomFields());
-        // Prepopulates the fields with the item's data
+public void setItem(Item givenItem) {
+    this.item = givenItem;
+    nameField.setText(item.getName());
+    descriptionArea.setText(item.getDescription());
+    quantSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, item.getQuantity()));
+    priceSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, item.getPurchasePrice()));
+    purchaseDateSelector.setValue(item.getPurchaseDate());
+    instanceToggle.setSelected(item.isTrackInstances());
+    cstmFieldToggle.setSelected(item.isCustomFields());
+    // Prepopulates the fields with the item's data
 
-        if (!item.isTrackInstances()) {
-            overviewBtn.setVisible(true);
-        } // Since overview is based on showing instances, it should only be visible if instances are tracked
-    }
+    if (!item.isTrackInstances()) {
+        overviewBtn.setVisible(true);
+    } // Since overview is based on showing instances, it should only be visible if instances are tracked
+}
 
     public void switchToEditItem(ActionEvent event) {
         boolean confirmed = confirmationDialogue("Edit Item", "Are you sure you want to edit this item?");

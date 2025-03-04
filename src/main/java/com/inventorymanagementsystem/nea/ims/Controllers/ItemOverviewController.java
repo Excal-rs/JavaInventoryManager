@@ -41,15 +41,12 @@ public class ItemOverviewController extends DefaultController implements Initial
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initialiseTable();
-        setUpContextMenu();
-        // Sets up table
-
-        totalValueLbl.setText(String.format("£%.2f", item.getTotalValue()));
-        quantLbl.setText(Integer.toString(item.getQuantity()));
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItem(Item givenItem) {
+        this.item = givenItem;
+        totalValueLbl.setText(String.format("£%.2f", item.getTotalValue()));
+        quantLbl.setText(Integer.toString(item.getQuantity()));
     }
 
     // Table Related Methods -----------------------------------------------------------------------------------------------------
@@ -77,58 +74,6 @@ public class ItemOverviewController extends DefaultController implements Initial
         instanceTable.getItems().addAll(instancesList);
     }
 
-    private void setUpContextMenu() {
-        ContextMenu contextMenu = new ContextMenu();
-
-        MenuItem editItem = new MenuItem("Edit Instance");
-        editItem.setOnAction(e -> {
-            ItemInstance selectedInstance = instanceTable.getSelectionModel().getSelectedItem();
-            // Gets the selected item
-            try {
-                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/editInstance.fxml"));
-                Scene scene = new Scene(loader.load());
-                scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
-                // Loads FXML and CSS for scene
-
-                EditInstanceController controller = loader.getController();
-                controller.setInstance(selectedInstance);
-                // Passes the selected item to the edit item form so that it can be edited
-
-                Stage stage = new Stage();
-                stage.setTitle("IMS - Edit Instance");
-                stage.setWidth(1000);
-                stage.setHeight(700);
-                // Adds title and size of stage
-
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(instanceTable.getScene().getWindow());
-                // Makes window a modal type so cannot interact with dashboard while it is open
-
-                stage.setScene(scene);
-                stage.showAndWait();
-                refreshInfo();
-                // Creates new window
-            } catch (Exception exception) {
-                throw new RuntimeException();
-            }
-        }); // Creates an entry in context menu to edit item
-
-        MenuItem deleteItem = new MenuItem("Delete Instance");
-        deleteItem.setOnAction(e -> {
-            ItemInstance selectedInstance = instanceTable.getSelectionModel().getSelectedItem();
-            boolean confirmed = confirmationDialogue("Delete Item Instance", "Are you sure you want to delete this instance?");
-            if (confirmed) {
-                item.removeInstance(selectedInstance);
-                refreshInfo();
-                successPopup("Instance Removed", "Instance successfully removed from inventory!");
-                // Removes instance from inventory
-            }
-        });
-
-        contextMenu.getItems().addAll(editItem, deleteItem);
-        instanceTable.setContextMenu(contextMenu);
-        // Adds the context menu to the table
-    }
 
     public void searchTable() {
         String search = searchField.getText().toLowerCase();
