@@ -10,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -97,7 +96,7 @@ public class DashboardController extends DefaultController implements Initializa
             Item selectedItem = itemsTable.getSelectionModel().getSelectedItem();
             // Gets the selected item
             try {
-                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItemForm.fxml"));
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItem.fxml"));
                 Scene scene = new Scene(loader.load());
                 scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
                 // Loads FXML and CSS for scene
@@ -110,6 +109,7 @@ public class DashboardController extends DefaultController implements Initializa
                 stage.setTitle("IMS - Edit Item");
                 stage.setWidth(1000);
                 stage.setHeight(700);
+                stage.setResizable(false);
                 // Adds title and size of stage
 
                 stage.initModality(Modality.APPLICATION_MODAL);
@@ -137,7 +137,41 @@ public class DashboardController extends DefaultController implements Initializa
             }
         });
 
-        contextMenu.getItems().addAll(editItem, deleteItem);
+        MenuItem viewItem = new MenuItem("View Item");
+        viewItem.setOnAction(e -> {
+            Item selectedItem = itemsTable.getSelectionModel().getSelectedItem();
+            // Gets the selected item
+            try {
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/viewItem.fxml"));
+                Scene scene = new Scene(loader.load());
+                scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
+                // Loads FXML and CSS for scene
+
+                ViewItemController controller = loader.getController();
+                controller.setItem(selectedItem);
+                // Passes the selected item to the edit item form so that it can be populated and viewed
+
+                Stage stage = new Stage();
+                stage.setTitle("IMS - View " + selectedItem.getName());
+                stage.setWidth(1000);
+                stage.setHeight(700);
+                stage.setResizable(false);
+                // Adds title and size of stage
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.initOwner(itemsTable.getScene().getWindow());
+                // Makes window a modal type so cannot interact with dashboard while it is open
+
+                stage.setScene(scene);
+                stage.showAndWait();
+                refreshInfo();
+                // Creates new window
+            } catch (Exception exception) {
+                throw new RuntimeException();
+            }
+        });
+
+        contextMenu.getItems().addAll(editItem, deleteItem, viewItem);
         itemsTable.setContextMenu(contextMenu);
         // Adds the context menu to the table
     }
@@ -169,7 +203,7 @@ public class DashboardController extends DefaultController implements Initializa
     // Form Navigation -------------------------------------------------------------------------------------------------
     public void openAddItemScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/addItemForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/addItem.fxml"));
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
             // Loads FXML file and adds CSS file
@@ -204,7 +238,6 @@ public class DashboardController extends DefaultController implements Initializa
             throw new RuntimeException();
         }
     }
-
 
 
 }

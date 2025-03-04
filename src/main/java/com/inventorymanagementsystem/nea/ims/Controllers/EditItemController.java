@@ -146,7 +146,7 @@ public class EditItemController extends DefaultController implements Initializab
         }
     }
 
-    public void cancel(ActionEvent event){
+    public void cancel(ActionEvent event) {
         closeForm(event);
     }
 

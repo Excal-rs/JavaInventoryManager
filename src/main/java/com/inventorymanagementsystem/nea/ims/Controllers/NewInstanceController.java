@@ -1,19 +1,17 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.Classes.Item;
 import com.inventorymanagementsystem.nea.ims.Classes.ItemInstance;
 import com.inventorymanagementsystem.nea.ims.Classes.ValidationResult;
 import com.inventorymanagementsystem.nea.ims.Classes.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import com.inventorymanagementsystem.nea.ims.Classes.Item;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class NewInstanceController extends DefaultController implements Submittable{
+public class NewInstanceController extends DefaultController implements Submittable {
     private Item item;
     @FXML
     private Label titleLbl;
@@ -45,16 +43,17 @@ public class NewInstanceController extends DefaultController implements Submitta
         ValidationResult notesCheck = Validator.general(notes);
         ValidationResult locationCheck = Validator.general(location);
 
-        if (!notesCheck.isValid()){
+        if (!notesCheck.isValid()) {
             errorLbl.setText(notesCheck.getReason());
             return;
-        } if (!locationCheck.isValid()){
+        }
+        if (!locationCheck.isValid()) {
             errorLbl.setText(locationCheck.getReason());
             return;
         } // Validate inputs
 
-        ItemInstance newInstance = new ItemInstance(item, Integer.parseInt(instanceID) ,notes, location);
-        if (item.addInstance(newInstance).isValid()){ // Add instance to item
+        ItemInstance newInstance = new ItemInstance(item, Integer.parseInt(instanceID), notes, location);
+        if (item.addInstance(newInstance).isValid()) { // Add instance to item
             successPopup("Instance Added", "Instance has been successfully added to the item");
             closeForm(event);
         } else {

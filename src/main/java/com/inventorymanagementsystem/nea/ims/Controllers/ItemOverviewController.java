@@ -1,6 +1,5 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
-import com.inventorymanagementsystem.nea.ims.Classes.Inventory;
 import com.inventorymanagementsystem.nea.ims.Classes.Item;
 import com.inventorymanagementsystem.nea.ims.Classes.ItemInstance;
 import com.inventorymanagementsystem.nea.ims.MainApplication;
@@ -49,7 +48,9 @@ public class ItemOverviewController extends DefaultController implements Initial
         quantLbl.setText(Integer.toString(item.getQuantity()));
     }
 
-
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     // Table Related Methods -----------------------------------------------------------------------------------------------------
     private void initialiseTable() {
@@ -84,7 +85,7 @@ public class ItemOverviewController extends DefaultController implements Initial
             ItemInstance selectedInstance = instanceTable.getSelectionModel().getSelectedItem();
             // Gets the selected item
             try {
-                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/editInstanceForm.fxml"));
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/editInstance.fxml"));
                 Scene scene = new Scene(loader.load());
                 scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
                 // Loads FXML and CSS for scene
@@ -156,7 +157,7 @@ public class ItemOverviewController extends DefaultController implements Initial
     // Form Navigation -------------------------------------------------------------------------------------------------
     public void openAddInstanceScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/addInstanceForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/addInstance.fxml"));
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
             // Loads FXML file and adds CSS file
@@ -185,11 +186,10 @@ public class ItemOverviewController extends DefaultController implements Initial
 
     public void logout(ActionEvent event) throws IOException {
         boolean confirmed = confirmationDialogue("Open Dashboard", "Are you sure you want to open the dashboard?");
-        if (confirmed){
-            switchToScene(event, "dashboard.fxml", new String[] {"dashboard.css"}, "IMS - Dashboard");
+        if (confirmed) {
+            switchToScene(event, "dashboard.fxml", new String[]{"dashboard.css"}, "IMS - Dashboard");
         }
     }
-
 
 
 }

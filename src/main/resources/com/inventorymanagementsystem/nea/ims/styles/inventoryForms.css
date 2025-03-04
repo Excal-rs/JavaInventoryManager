@@ -40,9 +40,26 @@ Button:pressed, ToggleButton:pressed, Spinner .increment-arrow-button:pressed, S
   -fx-cursor: closed-hand
 }
 
+.secondaryBtn, .primaryBtn:pressed {
+  -fx-background-color: -fx-base-colour;
+  -fx-text-fill: WHITE;
+  -fx-font-weight: BOLD;
+  -fx-border-color: WHITE;
+  -fx-border-width: 2;
+}
+
+.secondaryBtn:pressed, .primaryBtn {
+  -fx-background-color: WHITE;
+  -fx-text-fill: -fx-base-colour;
+  -fx-font-weight: BOLD;
+  -fx-border: hidden;
+}
+
 .fieldLbl {
   -fx-font-size: 15px;
 }
+
+
 
 ToggleButton {
     -fx-text-fill: -fx-base-colour;
@@ -93,3 +110,4 @@ ToggleButton:selected {
 #errorLbl {
     -fx-text-fill: red;
 }
+

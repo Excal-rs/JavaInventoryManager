@@ -175,7 +175,7 @@ public class Inventory {
     }
 
     // Report generation -----------------------------------------------------------------------------------------------
-    public static double getTotalInventoryValue(){
+    public static double getTotalInventoryValue() {
         ObservableList<Item> itemList = FXCollections.observableArrayList(items.values());
         double sum = 0;
         for (Item item : itemList) {
@@ -184,7 +184,7 @@ public class Inventory {
         return sum;
     }
 
-    public static int getInventoryQuantity(){
+    public static int getInventoryQuantity() {
         ObservableList<Item> itemList = FXCollections.observableArrayList(items.values());
         int sum = 0;
         for (Item item : itemList) {

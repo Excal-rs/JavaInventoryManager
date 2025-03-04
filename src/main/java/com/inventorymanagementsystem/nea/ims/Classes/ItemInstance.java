@@ -37,13 +37,13 @@ public class ItemInstance {
         return notes;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
     // Setters ---------------------------------------------------------------------------------------------------------
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public void setLocation(String location) {

@@ -13,7 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class EditInstanceController extends DefaultController implements Submittable{
+public class EditInstanceController extends DefaultController implements Submittable {
     private ItemInstance instance;
     private Item item;
     @FXML
@@ -49,17 +49,18 @@ public class EditInstanceController extends DefaultController implements Submitt
         ValidationResult notesCheck = Validator.general(notes);
         ValidationResult locationCheck = Validator.general(location);
 
-        if (!notesCheck.isValid()){
+        if (!notesCheck.isValid()) {
             errorLbl.setText(notesCheck.getReason());
             return;
-        } if (!locationCheck.isValid()){
+        }
+        if (!locationCheck.isValid()) {
             errorLbl.setText(locationCheck.getReason());
             return;
         } // Validate inputs
 
         instance.setNotes(notes);
         instance.setLocation(location);
-        if (item.editInstance(instance).isValid()){
+        if (item.editInstance(instance).isValid()) {
             closeForm(event);
             successPopup("Instance Updated", "Instance has been successfully updated");
         } else {
@@ -73,7 +74,7 @@ public class EditInstanceController extends DefaultController implements Submitt
 
     public void delete(ActionEvent event) {
         boolean confirmed = confirmationDialogue("Delete Instance", "Are you sure you want to delete this instance?");
-        if (confirmed){
+        if (confirmed) {
             item.removeInstance(instance);
             successPopup("Instance Deleted", "Instance has been successfully deleted");
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
