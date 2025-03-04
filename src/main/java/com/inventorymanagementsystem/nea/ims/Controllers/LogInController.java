@@ -59,7 +59,7 @@ public class LogInController extends DefaultController {
                     return;
                 }
                 User.setCurrentUser(results.getString("username"));
-                successPopup("Login Successful", User.getUsername()); // TODO: in phase 2 update to redirect to dashboard
+                successPopup("Login Successful", User.getUsername());
                 switchToScene(event, "dashboard.fxml", new String[]{"dashboard.css"}, "IMS - Dashboard", 1280, 800);
 
             } else {

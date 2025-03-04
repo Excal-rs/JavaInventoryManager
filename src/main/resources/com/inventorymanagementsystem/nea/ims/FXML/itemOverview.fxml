@@ -22,7 +22,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <TableView fx:id="itemsTable" prefHeight="464.0" prefWidth="1264.0" GridPane.columnSpan="3"
+                <TableView fx:id="instanceTable" prefHeight="464.0" prefWidth="1264.0" GridPane.columnSpan="3"
                            GridPane.rowIndex="1" GridPane.rowSpan="2">
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
@@ -44,12 +44,12 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                     </GridPane.margin>
                 </Rectangle>
-                <Label fx:id="titleLbl" text="Dashboard" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                <Label fx:id="titleLbl" text="Item overview" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                     </GridPane.margin>
                 </Label>
-                <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logout" text="Log out"
+                <Button fx:id="exitBtn" mnemonicParsing="false" onAction="#logout" text="Log out"
                         GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -74,13 +74,13 @@
                         <Insets bottom="23.0" left="23.0" right="23.0" top="23.0"/>
                     </GridPane.margin>
                 </Label>
-                <Label fx:id="totalQuantLbl" styleClass="infoValue" text="1,000,000,000" GridPane.columnIndex="1"
+                <Label fx:id="quantLbl" styleClass="infoValue" text="1,000,000,000" GridPane.columnIndex="1"
                        GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets/>
                     </GridPane.margin>
                 </Label>
-                <Label fx:id="totalPriceLbl" styleClass="infoValue" text="£1,000,000,000" GridPane.columnIndex="2"
+                <Label fx:id="totalValueLbl" styleClass="infoValue" text="£1,000,000,000" GridPane.columnIndex="2"
                        GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets/>

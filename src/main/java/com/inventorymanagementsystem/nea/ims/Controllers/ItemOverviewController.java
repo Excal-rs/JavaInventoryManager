@@ -1,5 +1,6 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.Classes.Inventory;
 import com.inventorymanagementsystem.nea.ims.Classes.Item;
 import com.inventorymanagementsystem.nea.ims.Classes.ItemInstance;
 import com.inventorymanagementsystem.nea.ims.MainApplication;
@@ -20,7 +21,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class ItemOverviewController extends DefaultController implements Initializable {
+public class ItemOverviewController extends DefaultController {
+    @FXML
+    private Button exitBtn;
+    @FXML
+    private Button addItemBtn;
+    @FXML
+    private Label titleLbl;
     @FXML
     private TableView<ItemInstance> instanceTable;
     @FXML
@@ -38,15 +45,13 @@ public class ItemOverviewController extends DefaultController implements Initial
 
     private Item item;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initialiseTable();
-    }
 
     public void setItem(Item givenItem) {
         this.item = givenItem;
         totalValueLbl.setText(String.format("£%.2f", item.getTotalValue()));
         quantLbl.setText(Integer.toString(item.getQuantity()));
+
+        initialiseTable();
     }
 
     // Table Related Methods -----------------------------------------------------------------------------------------------------
@@ -58,7 +63,7 @@ public class ItemOverviewController extends DefaultController implements Initial
         // Ensure the TableView has columns before adding data
         if (instanceTable.getColumns().isEmpty()) {
             TableColumn<ItemInstance, Integer> identifierColumn = new TableColumn<>("Identifier");
-            identifierColumn.setCellValueFactory(new PropertyValueFactory<>("instanceID"));
+            identifierColumn.setCellValueFactory(new PropertyValueFactory<>("identifier"));
 
             TableColumn<ItemInstance, String> notesColumn = new TableColumn<>("Notes");
             notesColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
@@ -107,8 +112,8 @@ public class ItemOverviewController extends DefaultController implements Initial
             scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
             // Loads FXML file and adds CSS file
 
-            NewInstanceController controller = new NewInstanceController();
-            controller.setItem(item);
+            NewInstanceController controller = loader.getController();
+            controller.setItem(Inventory.getItems().get(item.getName().toLowerCase()));
             // Passes item
 
             Stage stage = new Stage();
@@ -137,5 +142,7 @@ public class ItemOverviewController extends DefaultController implements Initial
     }
 
 
+    public void openAddItemScene(ActionEvent actionEvent) {
+    }
 }
 

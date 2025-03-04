@@ -1,9 +1,15 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
+import com.inventorymanagementsystem.nea.ims.Classes.Inventory;
 import com.inventorymanagementsystem.nea.ims.Classes.Item;
+import com.inventorymanagementsystem.nea.ims.MainApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 
 public class ViewItemController extends DefaultController {
@@ -30,30 +36,42 @@ public class ViewItemController extends DefaultController {
 
     private Item item;
 
-public void setItem(Item givenItem) {
-    this.item = givenItem;
-    nameField.setText(item.getName());
-    descriptionArea.setText(item.getDescription());
-    quantSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, item.getQuantity()));
-    priceSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, item.getPurchasePrice()));
-    purchaseDateSelector.setValue(item.getPurchaseDate());
-    instanceToggle.setSelected(item.isTrackInstances());
-    cstmFieldToggle.setSelected(item.isCustomFields());
-    // Prepopulates the fields with the item's data
+    public void setItem(Item givenItem) {
+        this.item = givenItem;
+        nameField.setText(item.getName());
+        descriptionArea.setText(item.getDescription());
+        quantSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, item.getQuantity()));
+        priceSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, item.getPurchasePrice()));
+        purchaseDateSelector.setValue(item.getPurchaseDate());
+        instanceToggle.setSelected(item.isTrackInstances());
+        cstmFieldToggle.setSelected(item.isCustomFields());
+        // Prepopulates the fields with the item's data
 
-    if (!item.isTrackInstances()) {
-        overviewBtn.setVisible(true);
-    } // Since overview is based on showing instances, it should only be visible if instances are tracked
-}
+        if (!item.isTrackInstances()) {
+            overviewBtn.setVisible(true);
+        } // Since overview is based on showing instances, it should only be visible if instances are tracked
+    }
 
     public void switchToEditItem(ActionEvent event) {
         boolean confirmed = confirmationDialogue("Edit Item", "Are you sure you want to edit this item?");
         if (confirmed) {
             try {
-                // Switch to the edit item scene
-                switchToScene(event, "editItem.fxml", new String[]{"inventoryForms.css"}, String.format("IMS - Edit %s", item.getName()));
-                EditItemController controller = new EditItemController();
-                controller.setItem(item); // Pass the current item to the edit item controller
+                loader = new FXMLLoader(MainApplication.class.getResource("FXML/editItem.fxml"));
+                // Gets the resource given
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(loader.load());
+                scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
+                // Loads the FXML file and resources into the scene
+
+                EditItemController controller = loader.getController();
+                controller.setItem(item);
+                // Assigns item
+
+                stage.setTitle("IMS - Edit " + item.getName());
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.show();
+                // Scene switched and displayed
             } catch (Exception e) {
                 throw new RuntimeException("Error switching to edit item scene", e);
             }
@@ -63,9 +81,23 @@ public void setItem(Item givenItem) {
     public void switchToOverview(ActionEvent event) {
         try {
             // Switch to the item overview scene
-            switchToScene(event, "itemOverview.fxml", new String[]{"dashboard.css"}, String.format("IMS - %s Overview", item.getName()), 1280, 800);
-            ItemOverviewController controller = new ItemOverviewController();
-            controller.setItem(item); // Pass the current item to the item overview controller
+            loader = new FXMLLoader(MainApplication.class.getResource("FXML/itemOverview.fxml"));
+            // Gets the resource given
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(loader.load());
+            scene.getStylesheets().add(MainApplication.class.getResource("styles/dashboard.css").toExternalForm());
+            // Loads the FXML file and resources into the scene
+
+            ItemOverviewController controller = loader.getController();
+            controller.setItem(Inventory.getItems().get(item.getName().toLowerCase()));
+            // Assigns item
+
+            stage.setTitle("IMS - " + item.getName() + " overview");
+            stage.setWidth(1280);
+            stage.setHeight(800);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
         } catch (Exception e) {
             throw new RuntimeException("Error switching to edit item scene", e);
         }

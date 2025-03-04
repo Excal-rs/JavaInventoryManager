@@ -29,7 +29,7 @@ public class NewInstanceController extends DefaultController implements Submitta
     private Label errorLbl;
 
     public void setItem(Item item) {
-        this.item = item.copyItem();
+        this.item = item;
         titleLbl.setText("Add New Instance - " + item.getName());
         nameField.setText(Integer.toString(item.generateInstanceId()));
     }

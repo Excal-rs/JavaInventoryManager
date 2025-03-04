@@ -9,7 +9,8 @@
             fx:controller="com.inventorymanagementsystem.nea.ims.Controllers.EditItemController">
     <Rectangle fx:id="backdrop" arcHeight="40.0" arcWidth="40.0" fill="DODGERBLUE" height="461.0" layoutX="50.0"
                layoutY="115.0" stroke="BLACK" strokeType="INSIDE" width="899.0"/>
-    <GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+    <GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="100.0" maxHeight="-Infinity" maxWidth="-Infinity"
+              minHeight="-Infinity"
               minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" vgap="20.0"
               xmlns="http://javafx.com/javafx/23.0.1">
         <columnConstraints>
@@ -27,7 +28,7 @@
             <Label fx:id="titleLbl" text="Edit Item" GridPane.halignment="LEFT" GridPane.valignment="TOP"/>
             <Label styleClass="fieldLbl" text="Item Name" GridPane.halignment="LEFT" GridPane.rowIndex="1"
                    GridPane.valignment="TOP"/>
-            <TextField fx:id="nameField" disable="true" editable="false" prefHeight="35.0" prefWidth="236.0"
+            <TextField fx:id="nameField" editable="false" prefHeight="35.0" prefWidth="236.0"
                        GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

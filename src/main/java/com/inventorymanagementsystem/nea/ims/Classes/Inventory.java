@@ -65,6 +65,7 @@ public class Inventory {
                 for (int i = 1; i < item.getQuantity() + 1; i++) {
                     addAllInstances.setInt(3, i);
                     addAllInstances.executeUpdate();
+                    item.getInstances().put(i,new ItemInstance(item, i, "N/A", "N/A"));
                 }
             }
 
@@ -121,10 +122,11 @@ public class Inventory {
                     deleteInstancesStatement.executeUpdate();
                     // Remove all existing instances from the itemInstance table.
                 } else {
-                    PreparedStatement generateInstancesStatement = connection.prepareStatement("INSERT INTO itemInstances (userID, itemID, instanceID) " +
-                            "VALUES (?,?,?);");
+                    PreparedStatement generateInstancesStatement = connection.prepareStatement("INSERT INTO itemInstances (userID, itemID, instanceID, notes, location) " +
+                            "VALUES (?,?,?, 'N/A', 'N/A');");
                     generateInstancesStatement.setString(1, User.getUsername());
                     generateInstancesStatement.setString(2, item.getName());
+
                     for (int i = 1; i < item.getQuantity() + 1; i++) {
                         generateInstancesStatement.setInt(3, i);
                         generateInstancesStatement.executeUpdate();

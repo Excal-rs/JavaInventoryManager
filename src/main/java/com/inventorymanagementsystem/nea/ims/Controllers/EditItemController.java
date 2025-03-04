@@ -39,7 +39,7 @@ public class EditItemController extends DefaultController implements Initializab
     @FXML
     private Label errorLbl;
 
-    private Item item;
+    private Item editedItem;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,18 +78,19 @@ public class EditItemController extends DefaultController implements Initializab
         // Validate Inputs for price spinner
     }
 
-    public void setItem(Item item) {
-        this.item = item.copyItem();
-        nameField.setText(item.getName());
-        descriptionArea.setText(item.getDescription());
-        instanceToggle.setSelected(item.isTrackInstances());
-        cstmFieldToggle.setSelected(item.isCustomFields());
-        quantSpinner.getEditor().setText(Integer.toString(item.getQuantity()));
-        priceSpinner.getEditor().setText(Double.toString(item.getPurchasePrice()));
-        purchaseDateSelector.setValue(item.getPurchaseDate());
+    public void setItem(Item givenItem) {
+        this.editedItem = givenItem.copyItem();
 
-        if (item.isTrackInstances()) {
-            int quantity = item.getQuantity();
+        nameField.setText(editedItem.getName());
+        descriptionArea.setText(editedItem.getDescription());
+        instanceToggle.setSelected(editedItem.isTrackInstances());
+        cstmFieldToggle.setSelected(editedItem.isCustomFields());
+        quantSpinner.getEditor().setText(Integer.toString(editedItem.getQuantity()));
+        priceSpinner.getEditor().setText(Double.toString(editedItem.getPurchasePrice()));
+        purchaseDateSelector.setValue(editedItem.getPurchaseDate());
+
+        if (editedItem.isTrackInstances()) {
+            int quantity = editedItem.getQuantity();
             SpinnerValueFactory.IntegerSpinnerValueFactory quantValueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) quantSpinner.getValueFactory();
             quantValueFactory.setMin(quantity);
         }
@@ -118,7 +119,6 @@ public class EditItemController extends DefaultController implements Initializab
             return;
         }
 
-        Item editedItem = item.copyItem();
         editedItem.setDescription(description);
         editedItem.setPurchasePrice(price);
         editedItem.setPurchaseDate(date);
@@ -139,7 +139,7 @@ public class EditItemController extends DefaultController implements Initializab
     public void deleteItem(ActionEvent event) {
         boolean confirmed = confirmationDialogue("Delete item", "This will permanently remove the item from the inventory.");
         if (confirmed) {
-            Inventory.removeItem(item);
+            Inventory.removeItem(editedItem);
             successPopup("Item Removed", "Item Successfully removed from inventory!");
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             stage.close();

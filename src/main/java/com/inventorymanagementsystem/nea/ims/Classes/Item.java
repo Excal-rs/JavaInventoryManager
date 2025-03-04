@@ -30,8 +30,8 @@ public class Item {
         this.purchasePrice = (double) purchasePrice / 100.0;
         this.purchaseDate = unixToDate(purchaseDate);
         // Converts unix time to a formatted string
-
         this.quantity = quantity;
+
         updateInstances();
     }
 
@@ -93,7 +93,8 @@ public class Item {
             // Initialise if instances is null, otherwise do nothing
 
             while (results.next()) {
-                instances.put(results.getInt("instanceID"), new ItemInstance(this, results.getInt("instanceID"), results.getString("notes"), results.getString("location")));
+                ItemInstance newInstance = new ItemInstance(this, results.getInt("instanceID"), results.getString("notes"), results.getString("location"));
+                instances.put(results.getInt("instanceID"), newInstance);
             } // Copies results of query into a hashmap of instances so it can stay even after connection is closed
 
             connection.close();
