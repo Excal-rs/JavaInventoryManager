@@ -40,7 +40,6 @@ public class DashboardController extends DefaultController implements Initializa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initialiseTable();
-        setUpContextMenu();
         // Sets up table
 
         totalPriceLbl.setText(String.format("£%.2f", Inventory.getTotalInventoryValue()));
@@ -86,6 +85,7 @@ public class DashboardController extends DefaultController implements Initializa
 
         // Set items in the TableView
         itemsTable.getItems().addAll(itemList);
+        setUpContextMenu();
     }
 
     private void setUpContextMenu() {

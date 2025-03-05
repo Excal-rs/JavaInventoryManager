@@ -46,14 +46,19 @@ public class EditInstanceController extends DefaultController implements Submitt
         String notes = notesArea.getText();
         String location = locationField.getText();
 
-        ValidationResult notesCheck = Validator.general(notes);
-        ValidationResult locationCheck = Validator.general(location);
+        ValidationResult notesCheck = null;
+        ValidationResult locationCheck = null;
+        if (notes != null) {
+            notesCheck = Validator.general(notes);
+        } if (location != null) {
+            locationCheck = Validator.general(location);
+        } // Validate inputs
 
-        if (!notesCheck.isValid()) {
+        if (notes != null && !notesCheck.isValid()) {
             errorLbl.setText(notesCheck.getReason());
             return;
         }
-        if (!locationCheck.isValid()) {
+        if (location != null && !locationCheck.isValid()) {
             errorLbl.setText(locationCheck.getReason());
             return;
         } // Validate inputs
@@ -61,8 +66,8 @@ public class EditInstanceController extends DefaultController implements Submitt
         instance.setNotes(notes);
         instance.setLocation(location);
         if (item.editInstance(instance).isValid()) {
-            closeForm(event);
             successPopup("Instance Updated", "Instance has been successfully updated");
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else {
             errorLbl.setText("Error updating instance");
         }
@@ -73,12 +78,13 @@ public class EditInstanceController extends DefaultController implements Submitt
     }
 
     public void delete(ActionEvent event) {
-        boolean confirmed = confirmationDialogue("Delete Instance", "Are you sure you want to delete this instance?");
+        boolean confirmed = confirmationDialogue("Delete Instance", "Are you sure you want to delete this Instance?");
         if (confirmed) {
             item.removeInstance(instance);
-            successPopup("Instance Deleted", "Instance has been successfully deleted");
+            successPopup("Instance deleted", "Instance has been successfully deleted");
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             stage.close();
         }
     }
 }
+

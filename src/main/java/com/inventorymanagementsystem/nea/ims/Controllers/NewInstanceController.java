@@ -6,10 +6,12 @@ import com.inventorymanagementsystem.nea.ims.Classes.ValidationResult;
 import com.inventorymanagementsystem.nea.ims.Classes.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class NewInstanceController extends DefaultController implements Submittable {
     private Item item;
@@ -55,7 +57,7 @@ public class NewInstanceController extends DefaultController implements Submitta
         ItemInstance newInstance = new ItemInstance(item, Integer.parseInt(instanceID), notes, location);
         if (item.addInstance(newInstance).isValid()) { // Add instance to item
             successPopup("Instance Added", "Instance has been successfully added to the item");
-            closeForm(event);
+            ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
         } else {
             errorLbl.setText("Error adding instance to item");
         }

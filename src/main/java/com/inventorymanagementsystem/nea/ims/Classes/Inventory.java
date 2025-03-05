@@ -136,8 +136,8 @@ public class Inventory {
             //  Handle change of instance value by either removing all instances or generating instances.
 
             if (item.isTrackInstances() && oldItem.isTrackInstances() && oldItem.getQuantity() < item.getQuantity()) {
-                PreparedStatement generateInstancesStatement = connection.prepareStatement("INSERT INTO itemInstances (userID, itemID, instanceID) " +
-                        "VALUES (?,?,?);");
+                PreparedStatement generateInstancesStatement = connection.prepareStatement("INSERT INTO itemInstances (userID, itemID, instanceID, notes, location) " +
+                        "VALUES (?,?,?,'N/A','N/A');");
                 generateInstancesStatement.setString(1, User.getUsername());
                 generateInstancesStatement.setString(2, item.getName());
                 int firstIdentifier = item.generateInstanceId();
@@ -169,6 +169,7 @@ public class Inventory {
 
             editStatement.executeUpdate();
             connection.close();
+            item.updateInstances();
             items.put(item.getName().toLowerCase(), item.copyItem());
             return new ValidationResult(true);
         } catch (Exception e) {

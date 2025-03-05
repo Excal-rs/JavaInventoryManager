@@ -43,6 +43,8 @@ public class Item {
         this.purchasePrice = purchasePrice;
         this.purchaseDate = purchaseDate;
         this.quantity = quantity;
+
+        updateInstances();
     }
 
     // Used when copying items;

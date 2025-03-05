@@ -48,7 +48,7 @@ public class ViewItemController extends DefaultController {
         // Prepopulates the fields with the item's data
 
         if (!item.isTrackInstances()) {
-            overviewBtn.setVisible(true);
+            overviewBtn.setVisible(false);
         } // Since overview is based on showing instances, it should only be visible if instances are tracked
     }
 

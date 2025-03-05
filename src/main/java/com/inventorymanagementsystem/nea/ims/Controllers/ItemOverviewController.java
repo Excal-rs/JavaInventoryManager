@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -77,6 +78,7 @@ public class ItemOverviewController extends DefaultController {
 
         // Set items in the TableView
         instanceTable.getItems().addAll(instancesList);
+        setupContextMenu();
     }
 
 
@@ -102,6 +104,51 @@ public class ItemOverviewController extends DefaultController {
 
         searchTable();
         // Refreshes the table and report section
+    }
+
+    public void setupContextMenu(){
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteItem = new MenuItem("Delete Instance");
+        deleteItem.setOnAction(event -> {
+            ItemInstance instance = instanceTable.getSelectionModel().getSelectedItem();
+            item.removeInstance(instance);
+            refreshInfo();
+        });
+        instanceTable.setContextMenu(contextMenu);
+
+        MenuItem editItem = new MenuItem("Edit Instance");
+        editItem.setOnAction(event -> {
+            ItemInstance instance = instanceTable.getSelectionModel().getSelectedItem();
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("FXML/editInstance.fxml"));
+            Scene scene;
+            try {
+                scene = new Scene(loader.load());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            scene.getStylesheets().add(MainApplication.class.getResource("styles/inventoryForms.css").toExternalForm());
+            // Loads FXML file and adds CSS file
+
+            EditInstanceController controller = loader.getController();
+            controller.setInstance(item.getInstances().get(instance.getIdentifier()));
+            // Passes instance
+
+            Stage stage = new Stage();
+            stage.setTitle("IMS - Edit Instance");
+            stage.setWidth(1000);
+            stage.setHeight(700);
+            // Sets title and size of stage
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(instanceTable.getScene().getWindow());
+            // Makes window a modal type so cannot interact with dashboard while it is open
+
+            stage.setScene(scene);
+            stage.showAndWait();
+            refreshInfo();
+        });
+
+        contextMenu.getItems().addAll(editItem, deleteItem);
     }
 
     // Form Navigation -------------------------------------------------------------------------------------------------
@@ -134,15 +181,9 @@ public class ItemOverviewController extends DefaultController {
         }
     }
 
-    public void logout(ActionEvent event) throws IOException {
-        boolean confirmed = confirmationDialogue("Open Dashboard", "Are you sure you want to open the dashboard?");
-        if (confirmed) {
-            switchToScene(event, "dashboard.fxml", new String[]{"dashboard.css"}, "IMS - Dashboard");
-        }
+    public void exit(ActionEvent event) throws IOException {
+        closeForm(event);
     }
 
-
-    public void openAddItemScene(ActionEvent actionEvent) {
-    }
 }
 
