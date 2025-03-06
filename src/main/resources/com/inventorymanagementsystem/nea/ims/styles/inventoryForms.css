@@ -31,12 +31,12 @@ Spinner .increment-arrow-button .increment-arrow, .decrement-arrow-button .decre
     -fx-background-color: white;
 }
 
-Button:hover, ToggleButton:hover, Spinner .increment-arrow-button:hover, Spinner .decrement-arrow-button:hover, DatePicker .arrow-button:hover {
+Button:hover, ToggleButton:hover, Spinner .increment-arrow-button:hover, Spinner .decrement-arrow-button:hover, DatePicker .arrow-button:hover, .cstmFieldTitle:hover {
   -fx-cursor: hand;
   -fx-opacity: 0.8;
 }
 
-Button:pressed, ToggleButton:pressed, Spinner .increment-arrow-button:pressed, Spinner .decrement-arrow-button:pressed, DatePicker .arrow-button:selected {
+Button:pressed, ToggleButton:pressed, Spinner .increment-arrow-button:pressed, Spinner .decrement-arrow-button:pressed, DatePicker .arrow-button:selected, .cstmFieldTitle:pressed {
   -fx-cursor: closed-hand
 }
 
@@ -111,3 +111,10 @@ ToggleButton:selected {
     -fx-text-fill: red;
 }
 
+.cstmFieldTitle {
+  -fx-border-radius: 7;
+  -fx-background-radius: 7;
+  -fx-border-color: -fx-base-colour;
+  -fx-border-width: 2;
+  -fx-background-color: WHITE;
+}

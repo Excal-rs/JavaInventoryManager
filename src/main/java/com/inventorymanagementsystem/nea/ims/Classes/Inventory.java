@@ -7,15 +7,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Inventory {
     private static final String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
     private static final HashMap<String, Item> items = new HashMap<>();
-
+    private static ArrayList<String> customFields = new ArrayList<>();
     static {
         updateItems();
+        updateCustomFields();
     }
+
 
     // Item Management -------------------------------------------------------------------------------------------------
     public static void updateItems() {
@@ -31,6 +34,24 @@ public class Inventory {
                 Item newItem = new Item(results.getString("itemID"), results.getString("itemDescription"), results.getBoolean("trackInstances"),
                         results.getBoolean("useCustomFields"), results.getInt("purchasePrice"), results.getInt("purchaseDate"), results.getInt("quantity"));
                 items.put(results.getString("itemID").toLowerCase(), newItem);
+            }
+            connection.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void updateCustomFields() {
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement getCustomFieldsStatement = connection.prepareStatement("SELECT * FROM customFields " +
+                    "WHERE LOWER(userID) = LOWER(?);");
+            getCustomFieldsStatement.setString(1, User.getUsername());
+            ResultSet results = getCustomFieldsStatement.executeQuery();
+            // Fetches result set from database
+
+            while (results.next()) {
+                customFields.add(results.getString("fieldName"));
             }
             connection.close();
         } catch (Exception e) {
@@ -203,6 +224,10 @@ public class Inventory {
 
     public static String getUrl() {
         return url;
+    }
+
+    public static ArrayList<String> getCustomFields() {
+        return customFields;
     }
 }
 

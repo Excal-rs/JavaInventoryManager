@@ -9,10 +9,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class NewItemController extends DefaultController implements Initializable, Submittable {
@@ -36,6 +38,16 @@ public class NewItemController extends DefaultController implements Initializabl
     private Button cancelBtn;
     @FXML
     private Label errorLbl;
+    @FXML
+    private VBox cstmFieldSection;
+    @FXML
+    private ComboBox<String> cstmFieldTitle1;
+    @FXML
+    private TextField cstmField1;
+    @FXML
+    private ComboBox<String> cstmFieldTitle2;
+    @FXML
+    private TextField cstmField2;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -112,8 +124,62 @@ public class NewItemController extends DefaultController implements Initializabl
         }
     }
 
+
+
     public void cancel(ActionEvent event) {
         closeForm(event);
     }
 
+    public void toggleTrackInstances(ActionEvent event) {
+        if (instanceToggle.isSelected()) {
+            instanceToggle.setText("On");
+        } else {
+            instanceToggle.setText("Off");
+        }
+    }
+
+    public void toggleCustomFields(ActionEvent event) { // Changes the visibility of the custom fields section based on the toggle
+        if (cstmFieldToggle.isSelected()) {
+            cstmFieldToggle.setText("On");
+            cstmFieldSection.setVisible(true);
+
+            ArrayList<String> customFields = Inventory.getCustomFields();
+            cstmFieldTitle1.getItems().setAll(customFields);
+            // Populates the custom field title dropdown with the custom fields that already exist
+
+            cstmField1.setDisable(true);
+            cstmFieldTitle2.setDisable(true);
+            cstmField2.setDisable(true);
+            // Prevents the user from entering custom field values before selecting a title or adding info
+
+            cstmFieldTitle1.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.isEmpty()){
+                    cstmField1.setText("");
+                    cstmField2.setDisable(true);
+                }
+                else { cstmField1.setDisable(false); }
+            }); // Enables the first custom field value when the first custom field title is selected
+
+            cstmField1.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.isEmpty()) {
+                    ArrayList<String> remainingFields = new ArrayList<>(customFields);
+                    remainingFields.remove(cstmFieldTitle1.getValue());
+                    cstmFieldTitle2.getItems().setAll(remainingFields);
+                    cstmFieldTitle2.setDisable(false);
+                } else {
+                    cstmFieldTitle2.setValue("");
+                    cstmFieldTitle2.setDisable(true);
+                }
+            }); // Enables the second custom field title dropdown when the first custom field value is entered
+
+            cstmFieldTitle2.valueProperty().addListener((observable, oldValue, newValue) -> {
+                cstmField2.setDisable(newValue.isEmpty());
+                cstmField2.setText("");
+            }); // Enables the second custom field value when the second custom field title is selected
+
+        } else {
+            cstmFieldToggle.setText("Off");
+            cstmFieldSection.setVisible(false);
+        }
+    }
 }
