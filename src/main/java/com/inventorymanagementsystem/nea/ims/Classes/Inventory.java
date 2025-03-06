@@ -30,9 +30,35 @@ public class Inventory {
             ResultSet results = getItemsStatement.executeQuery();
             // Fetches result set from database
 
+            PreparedStatement getCustomFieldsValues = connection.prepareStatement("SELECT * FROM customFieldValues " +
+                    "WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
+            getCustomFieldsValues.setString(1, User.getUsername());
+            CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
+            // Used to fetch custom fields from database
+
             while (results.next()) {
-                Item newItem = new Item(results.getString("itemID"), results.getString("itemDescription"), results.getBoolean("trackInstances"),
-                        results.getBoolean("useCustomFields"), results.getInt("purchasePrice"), results.getInt("purchaseDate"), results.getInt("quantity"));
+                if (results.getBoolean("useCustomFields") ) {
+                    getCustomFieldsValues.setString(2, results.getString("itemID"));
+                    ResultSet customFieldsResults = getCustomFieldsValues.executeQuery();
+                    for (int i = 0; i < 2; i++) {
+                        if (customFieldsResults.next()){
+                            customFieldValues[i] = new CustomFieldValue(customFieldsResults.getString("fieldTitle"), customFieldsResults.getString("fieldValue"));
+                        } else {
+                            customFieldValues[i] = null;
+                        }
+                    } // Fetches custom field values for the item
+                } else {
+                    customFieldValues = null;
+                }
+
+                Item newItem = new Item(results.getString("itemID"),
+                        results.getString("itemDescription"),
+                        results.getBoolean("trackInstances"),
+                        results.getBoolean("useCustomFields"),
+                        results.getInt("purchasePrice"),
+                        results.getLong("purchaseDate"),
+                        results.getInt("quantity"),
+                        customFieldValues);
                 items.put(results.getString("itemID").toLowerCase(), newItem);
             }
             connection.close();

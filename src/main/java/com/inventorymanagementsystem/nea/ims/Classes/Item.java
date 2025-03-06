@@ -19,8 +19,38 @@ public class Item {
     private LocalDate purchaseDate;
     private int quantity;
     private HashMap<Integer, ItemInstance> instances;
+    private CustomFieldValue[] customFieldValues;
 
     // Constructors ----------------------------------------------------------------------------------------------------
+    public Item(String name, String description, boolean trackInstances,
+                boolean customFields, int purchasePrice, long purchaseDate, int quantity, CustomFieldValue[] customFieldValues) {
+        this.name = name;
+        this.description = description;
+        this.trackInstances = trackInstances;
+        this.customFields = customFields;
+        this.purchasePrice = (double) purchasePrice / 100.0;
+        this.purchaseDate = unixToDate(purchaseDate);
+        // Converts unix time to a formatted string
+        this.quantity = quantity;
+        this.customFieldValues = customFieldValues;
+
+        updateInstances();
+    }
+
+    public Item(String name, String description, boolean trackInstances, boolean customFields, double purchasePrice, LocalDate purchaseDate, int quantity, CustomFieldValue[] customFieldValues) {
+        this.name = name;
+        this.description = description;
+        this.trackInstances = trackInstances;
+        this.customFields = customFields;
+        this.purchasePrice = purchasePrice;
+        this.purchaseDate = purchaseDate;
+        this.quantity = quantity;
+        this.customFieldValues = customFieldValues;
+
+        updateInstances();
+    }
+
+    // TEMPORARY CONTRUCTORS:
     public Item(String name, String description, boolean trackInstances,
                 boolean customFields, int purchasePrice, long purchaseDate, int quantity) {
         this.name = name;
@@ -57,7 +87,9 @@ public class Item {
         this.purchaseDate = item.getPurchaseDate();
         this.quantity = item.getQuantity();
         this.instances = item.getInstances();
+        this.customFieldValues = item.customFieldValues;
     }
+
 
     // Misc ------------------------------------------------------------------------------------------------------------
     public static long dateToUnix(LocalDate date) {
@@ -235,8 +267,8 @@ public class Item {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public double getPurchasePrice() {
+        return purchasePrice;
     }
 
     public HashMap<Integer, ItemInstance> getInstances() {
@@ -247,46 +279,55 @@ public class Item {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public LocalDate getPurchaseDate() {
         return purchaseDate;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
     }
 
     public double getTotalValue() {
         return quantity * purchasePrice;
     }
 
-
-    // Setters ---------------------------------------------------------------------------------------------------------
-
-    public double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
+    public CustomFieldValue[] getCustomFieldValues() {
+        return customFieldValues;
     }
 
     public boolean isTrackInstances() {
         return trackInstances;
     }
 
-    public void setTrackInstances(boolean trackInstances) {
-        this.trackInstances = trackInstances;
-    }
-
     public boolean isCustomFields() {
         return customFields;
     }
 
-    public void setCustomFields(boolean customFields) {
+
+
+    // Setters ---------------------------------------------------------------------------------------------------------
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public void setIsTrackInstances(boolean trackInstances) {
+        this.trackInstances = trackInstances;
+    }
+
+    public void setIsCustomFields(boolean customFields) {
         this.customFields = customFields;
+    }
+
+    public void setCustomFields(CustomFieldValue[] customFieldValues) {
+        this.customFieldValues = customFieldValues;
     }
 }

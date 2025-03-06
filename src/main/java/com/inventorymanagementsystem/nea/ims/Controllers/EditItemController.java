@@ -122,8 +122,8 @@ public class EditItemController extends DefaultController implements Initializab
         editedItem.setDescription(description);
         editedItem.setPurchasePrice(price);
         editedItem.setPurchaseDate(date);
-        editedItem.setTrackInstances(trackInstances);
-        editedItem.setCustomFields(customFields);
+        editedItem.setIsTrackInstances(trackInstances);
+        editedItem.setIsCustomFields(customFields);
         editedItem.setQuantity(quantity);
 
         Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
