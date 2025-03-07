@@ -89,43 +89,39 @@ public class NewItemController extends DefaultController implements Initializabl
     @Override
     public void submit(ActionEvent event) {
         String name = nameField.getText();
-        String description = descriptionArea.getText();
+        String description = descriptionArea.getText() == "" ? "N/A" : descriptionArea.getText();
+        int quantity = quantSpinner.getValue();
         double price = priceSpinner.getValue();
-        LocalDate date = purchaseDateSelector.getValue();
+        LocalDate date = purchaseDateSelector.getValue() == null ? LocalDate.now() : purchaseDateSelector.getValue();
         boolean customFields = cstmFieldToggle.isSelected();
         boolean trackInstances = instanceToggle.isSelected();
-        int quantity = quantSpinner.getValue();
 
-        ValidationResult[] validationResults = new ValidationResult[3];
-        validationResults[0] = Validator.name(name);
-        validationResults[1] = Validator.general(description);
-        validationResults[2] = Validator.date(date);
-
-        for (ValidationResult result : validationResults){
-            if (!result.isValid()){
-                errorLbl.setText(result.getReason());
-                return;
-            }
-        }
 
         CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
         if (customFields){
-            String cstmTitle1 = cstmFieldTitle1.getValue() == null ? "" : cstmFieldTitle1.getValue();
-            String cstmTitle2 = cstmFieldTitle2.getValue() == null ? "" : cstmFieldTitle2.getValue();
-            String cstmFieldValue1 = cstmField1.getText();
-            String cstmFieldValue2 = cstmField2.getText();
+            String cstmTitle1 = cstmField1.getText() == "" ? null : cstmFieldTitle1.getValue();
+            String cstmTitle2 = cstmField2.getText() == "" ? null : cstmFieldTitle2.getValue();
+            String cstmFieldValue1 = cstmField1 != null ? null : cstmField1.getText();
+            String cstmFieldValue2 = cstmField1 != null ? null : cstmField2.getText();
             // Fetches inputted values
-            ValidationResult[] validationResults1 = new ValidationResult[4];
-            validationResults1[0] = Validator.name(cstmTitle1);
-            validationResults1[1] = Validator.name(cstmTitle2);
-            validationResults1[2] = Validator.general(cstmFieldValue1);
-            validationResults1[3] = Validator.general(cstmFieldValue2);
 
-            for (ValidationResult result : validationResults1){
-                if (!result.isValid()){
-                    errorLbl.setText("Custom fields inputs are not valid! ");
-                    return;
-                }
+            ValidationResult title1Check = Validator.name(cstmTitle1);
+            ValidationResult title2Check = Validator.name(cstmTitle2);
+            ValidationResult value1Check = Validator.general(cstmFieldValue1);
+            ValidationResult value2Check = Validator.general(cstmFieldValue2);
+
+            if (cstmTitle1 != null && !title1Check.isValid()){
+                errorLbl.setText("Custom field title 1 can not be named that!");
+                return;
+            } if (cstmFieldValue1 != null && !value1Check.isValid()){
+                errorLbl.setText("Custom field value 1 can not have that!");
+                return;
+            } if (cstmTitle2 != null && !title2Check.isValid()){
+                errorLbl.setText("Custom field title 2 can not be named that!");
+                return;
+            } if (cstmFieldValue2 != null && !value2Check.isValid()) {
+                errorLbl.setText("Custom field value 2 can not have that!");
+                return;
             }
 
             customFieldValues[0] = new CustomFieldValue(cstmTitle1, cstmFieldValue1);

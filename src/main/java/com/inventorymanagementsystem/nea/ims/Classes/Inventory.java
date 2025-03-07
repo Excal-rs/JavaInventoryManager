@@ -35,14 +35,12 @@ public class Inventory {
             getCustomFieldsValues.setString(1, User.getUsername());
             // Used to fetch custom fields from database
 
-            CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
-
             while (results.next()) {
+                CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
                 if (results.getBoolean("useCustomFields") ) {
                     getCustomFieldsValues.setString(2, results.getString("itemID"));
                     ResultSet customFieldsResults = getCustomFieldsValues.executeQuery();
                     for (int i = 0; i < 2; i++) {
-                        assert customFieldValues != null;
                         if (customFieldsResults.next()){
                             customFieldValues[i] = new CustomFieldValue(customFieldsResults.getString("fieldTitle"),
                                                                          customFieldsResults.getString("fieldValue"));
@@ -128,7 +126,7 @@ public class Inventory {
                 PreparedStatement addCustomField = connection.prepareStatement("INSERT INTO customFields VALUES (?,?);");
                 addCustomField.setString(1, User.getUsername());
                 for (int i = 0; i < 2; i++){
-                    if (customFieldValues[i] != null && !customFields.contains(customFieldValues[i])) {
+                    if (customFieldValues[i] != null && !customFields.contains(customFieldValues[i].getTitle())) {
                         addCustomField.setString(2, customFieldValues[i].getTitle());
                         addCustomField.executeUpdate();
                         customFields.add(customFieldValues[i].getTitle());
