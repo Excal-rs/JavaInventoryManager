@@ -114,6 +114,31 @@ public class Inventory {
                     addAllInstances.executeUpdate();
                     item.getInstances().put(i,new ItemInstance(item, i, "N/A", "N/A"));
                 }
+            } // Generates instances if item is set to track instances
+
+            if (item.isCustomFields()){
+                CustomFieldValue[] customFieldValues = item.getCustomFieldValues();
+
+                PreparedStatement addCustomField = connection.prepareStatement("INSERT INTO customFields VALUES (?,?);");
+                addCustomField.setString(1, User.getUsername());
+                for (int i = 0; i < 2; i++){
+                    if (customFieldValues[i] != null && !customFields.contains(customFieldValues[i])) {
+                        addCustomField.setString(2, customFieldValues[i].getTitle());
+                        addCustomField.executeUpdate();
+                        customFields.add(customFieldValues[i].getTitle());
+                    }
+                } // If the custom fields don't exist it will add them to the database
+
+                PreparedStatement addCustomFieldValues = connection.prepareStatement("INSERT INTO customFieldValues (userID, itemID, fieldTitle, fieldValue) VALUES (?,?,?,?);");
+                addCustomFieldValues.setString(1, User.getUsername());
+                addCustomFieldValues.setString(2, item.getName());
+                for (int i = 0; i < 2; i++){
+                    if (customFieldValues[i] != null) {
+                        addCustomFieldValues.setString(3, customFieldValues[i].getTitle());
+                        addCustomFieldValues.setString(4, customFieldValues[i].getValue());
+                        addCustomFieldValues.executeUpdate();
+                    }
+                } // Adds custom field values to the database
             }
 
             connection.close();
