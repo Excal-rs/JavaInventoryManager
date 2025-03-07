@@ -1,9 +1,6 @@
 package com.inventorymanagementsystem.nea.ims.Controllers;
 
-import com.inventorymanagementsystem.nea.ims.Classes.Inventory;
-import com.inventorymanagementsystem.nea.ims.Classes.Item;
-import com.inventorymanagementsystem.nea.ims.Classes.ValidationResult;
-import com.inventorymanagementsystem.nea.ims.Classes.Validator;
+import com.inventorymanagementsystem.nea.ims.Classes.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -99,22 +96,44 @@ public class NewItemController extends DefaultController implements Initializabl
         boolean trackInstances = instanceToggle.isSelected();
         int quantity = quantSpinner.getValue();
 
-        ValidationResult nameResult = Validator.name(name);
-        ValidationResult descriptionResult = Validator.general(description);
-        ValidationResult dateResult = Validator.date(date);
+        ValidationResult[] validationResults = new ValidationResult[3];
+        validationResults[0] = Validator.name(name);
+        validationResults[1] = Validator.general(description);
+        validationResults[2] = Validator.date(date);
 
-        if (!nameResult.isValid()) {
-            errorLbl.setText(nameResult.getReason());
-            return;
-        } else if (!descriptionResult.isValid()) {
-            errorLbl.setText(descriptionResult.getReason());
-            return;
-        } else if (!dateResult.isValid()) {
-            errorLbl.setText(dateResult.getReason());
-            return;
+        for (ValidationResult result : validationResults){
+            if (!result.isValid()){
+                errorLbl.setText(result.getReason());
+                return;
+            }
         }
 
-        Item newItem = new Item(name, description, trackInstances, customFields, price, date, quantity);
+        CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
+        if (customFields){
+            String cstmTitle1 = cstmFieldTitle1.getValue() == null ? "" : cstmFieldTitle1.getValue();
+            String cstmTitle2 = cstmFieldTitle2.getValue() == null ? "" : cstmFieldTitle2.getValue();
+            String cstmFieldValue1 = cstmField1.getText();
+            String cstmFieldValue2 = cstmField2.getText();
+            // Fetches inputted values
+            ValidationResult[] validationResults1 = new ValidationResult[4];
+            validationResults1[0] = Validator.name(cstmTitle1);
+            validationResults1[1] = Validator.name(cstmTitle2);
+            validationResults1[2] = Validator.general(cstmFieldValue1);
+            validationResults1[3] = Validator.general(cstmFieldValue2);
+
+            for (ValidationResult result : validationResults1){
+                if (!result.isValid()){
+                    errorLbl.setText("Custom fields inputs are not valid! ");
+                    return;
+                }
+            }
+
+            customFieldValues[0] = new CustomFieldValue(cstmTitle1, cstmFieldValue1);
+            customFieldValues[1] = new CustomFieldValue(cstmTitle2, cstmFieldValue2);
+            // Sets the values of the arrays
+        }
+
+        Item newItem = new Item(name, description, trackInstances, customFields, price, date, quantity, customFieldValues);
         Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
         if (Inventory.addItem(newItem).isValid()) {
             successPopup("Item successfully added", "Item successfully added");

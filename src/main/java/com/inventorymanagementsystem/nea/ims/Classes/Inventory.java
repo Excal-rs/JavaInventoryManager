@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Inventory {
     private static final String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
     private static final HashMap<String, Item> items = new HashMap<>();
-    private static ArrayList<String> customFields = new ArrayList<>();
+    private static ArrayList<String> customFields;
     static {
         updateItems();
         updateCustomFields();
@@ -33,16 +33,19 @@ public class Inventory {
             PreparedStatement getCustomFieldsValues = connection.prepareStatement("SELECT * FROM customFieldValues " +
                     "WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
             getCustomFieldsValues.setString(1, User.getUsername());
-            CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
             // Used to fetch custom fields from database
+
+            CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
 
             while (results.next()) {
                 if (results.getBoolean("useCustomFields") ) {
                     getCustomFieldsValues.setString(2, results.getString("itemID"));
                     ResultSet customFieldsResults = getCustomFieldsValues.executeQuery();
                     for (int i = 0; i < 2; i++) {
+                        assert customFieldValues != null;
                         if (customFieldsResults.next()){
-                            customFieldValues[i] = new CustomFieldValue(customFieldsResults.getString("fieldTitle"), customFieldsResults.getString("fieldValue"));
+                            customFieldValues[i] = new CustomFieldValue(customFieldsResults.getString("fieldTitle"),
+                                                                         customFieldsResults.getString("fieldValue"));
                         } else {
                             customFieldValues[i] = null;
                         }
@@ -69,6 +72,9 @@ public class Inventory {
 
     private static void updateCustomFields() {
         try {
+            if (customFields == null){
+                customFields = new ArrayList<>();
+            }
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement getCustomFieldsStatement = connection.prepareStatement("SELECT * FROM customFields " +
                     "WHERE LOWER(userID) = LOWER(?);");
