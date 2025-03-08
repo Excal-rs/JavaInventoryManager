@@ -81,7 +81,7 @@ public class Inventory {
             // Fetches result set from database
 
             while (results.next()) {
-                customFields.add(results.getString("fieldName"));
+                customFields.add(results.getString("fieldTitle"));
             }
             connection.close();
         } catch (Exception e) {
@@ -133,7 +133,8 @@ public class Inventory {
                     }
                 } // If the custom fields don't exist it will add them to the database
 
-                PreparedStatement addCustomFieldValues = connection.prepareStatement("INSERT INTO customFieldValues (userID, itemID, fieldTitle, fieldValue) VALUES (?,?,?,?);");
+                PreparedStatement addCustomFieldValues = connection.prepareStatement("INSERT INTO customFieldValues (userID, itemID, fieldTitle, fieldValue) " +
+                        "VALUES (?,?,?,?);");
                 addCustomFieldValues.setString(1, User.getUsername());
                 addCustomFieldValues.setString(2, item.getName());
                 for (int i = 0; i < 2; i++){

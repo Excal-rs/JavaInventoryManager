@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class NewItemController extends DefaultController implements Initializable, Submittable {
@@ -89,26 +90,43 @@ public class NewItemController extends DefaultController implements Initializabl
     @Override
     public void submit(ActionEvent event) {
         String name = nameField.getText();
-        String description = descriptionArea.getText() == "" ? "N/A" : descriptionArea.getText();
+        String description = descriptionArea.getText().isEmpty() ? "N/A" : descriptionArea.getText();
         int quantity = quantSpinner.getValue();
         double price = priceSpinner.getValue();
         LocalDate date = purchaseDateSelector.getValue() == null ? LocalDate.now() : purchaseDateSelector.getValue();
         boolean customFields = cstmFieldToggle.isSelected();
         boolean trackInstances = instanceToggle.isSelected();
 
+        ValidationResult nameCheck = Validator.name(name);
+        ValidationResult descriptionCheck = Validator.general(description);
+        ValidationResult dateCheck = Validator.date(date);
+
+        if (!nameCheck.isValid()) {
+            errorLbl.setText(nameCheck.getReason());
+            return;
+        }
+        if (!descriptionCheck.isValid()) {
+            errorLbl.setText(descriptionCheck.getReason());
+            return;
+        }
+        if (!dateCheck.isValid()) {
+            errorLbl.setText(dateCheck.getReason());
+            return;
+        }
 
         CustomFieldValue[] customFieldValues = new CustomFieldValue[2];
         if (customFields){
-            String cstmTitle1 = cstmField1.getText() == "" ? null : cstmFieldTitle1.getValue();
-            String cstmTitle2 = cstmField2.getText() == "" ? null : cstmFieldTitle2.getValue();
-            String cstmFieldValue1 = cstmField1 != null ? null : cstmField1.getText();
-            String cstmFieldValue2 = cstmField1 != null ? null : cstmField2.getText();
+            String cstmTitle1 = cstmField1.getText().isEmpty() ? null : cstmFieldTitle1.getValue();
+            String cstmTitle2 = cstmField2.getText().isEmpty() ? null : cstmFieldTitle2.getValue();
+            String cstmFieldValue1 = cstmTitle1 == null ? null : cstmField1.getText();
+            String cstmFieldValue2 = cstmTitle2 == null ? null : cstmField2.getText();
             // Fetches inputted values
 
-            ValidationResult title1Check = Validator.name(cstmTitle1);
-            ValidationResult title2Check = Validator.name(cstmTitle2);
-            ValidationResult value1Check = Validator.general(cstmFieldValue1);
-            ValidationResult value2Check = Validator.general(cstmFieldValue2);
+            ValidationResult title1Check = cstmTitle1 == null ? null : Validator.name(cstmTitle1);
+            ValidationResult title2Check = cstmTitle2 == null ? null: Validator.name(cstmTitle2);
+            ValidationResult value1Check = cstmFieldValue1 == null ? null : Validator.general(cstmFieldValue1);
+            ValidationResult value2Check = cstmFieldValue2 == null ? null : Validator.general(cstmFieldValue2);
+            // Validates inputs
 
             if (cstmTitle1 != null && !title1Check.isValid()){
                 errorLbl.setText("Custom field title 1 can not be named that!");
@@ -124,8 +142,8 @@ public class NewItemController extends DefaultController implements Initializabl
                 return;
             }
 
-            customFieldValues[0] = new CustomFieldValue(cstmTitle1, cstmFieldValue1);
-            customFieldValues[1] = new CustomFieldValue(cstmTitle2, cstmFieldValue2);
+            customFieldValues[0] = cstmTitle1 == null ? null : new CustomFieldValue(cstmTitle1, cstmFieldValue1);
+            customFieldValues[1] = cstmTitle2 == null ? null : new CustomFieldValue(cstmTitle2, cstmFieldValue2);
             // Sets the values of the arrays
         }
 
