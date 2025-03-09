@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -79,7 +80,7 @@
                         <Insets />
                     </GridPane.margin>
                 </Label>
-                <TextField fx:id="searchField" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+                <TextField fx:id="searchField" promptText="Search Instances..." GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="140.0" right="40.0" top="20.0" />
                     </GridPane.margin>
@@ -88,6 +89,9 @@
                     <GridPane.margin>
                         <Insets top="20.0" />
                     </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="Search" />
+               </tooltip>
                 </Button>
             </children>
         </GridPane>

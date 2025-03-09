@@ -75,7 +75,7 @@ public class Validator {
         if (string.length() > 250) {
             return new ValidationResult(false, "Description too long! Max 250 characters.");
         }
-        Pattern pattern = Pattern.compile("^[A-Za-z0-9!@#$%^:;&*_+=,.?/ ()-].+$");
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9!@#$€¢£¥₹₣₤₱₽₨₩₪₯฿₫₺₼₾%^:;&*_+=,.?/ ()-].+$");
         Matcher matcher = pattern.matcher(string);
         if (!matcher.matches()) {
             return new ValidationResult(false, "No Illegal characters!");

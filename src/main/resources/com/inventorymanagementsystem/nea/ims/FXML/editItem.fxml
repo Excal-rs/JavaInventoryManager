@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -62,8 +63,14 @@
                 <children>
                     <Label styleClass="fieldLbl" text="Track Item Instances" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
                     <Label styleClass="fieldLbl" text="Add custom Fields" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
-                    <ToggleButton fx:id="instanceToggle" mnemonicParsing="false" prefHeight="35.0" prefWidth="99.0" text="Off / On" />
-                    <ToggleButton fx:id="cstmFieldToggle" mnemonicParsing="false" prefHeight="35.0" prefWidth="99.0" text="Off / On" GridPane.columnIndex="1" />
+                    <ToggleButton fx:id="instanceToggle" mnemonicParsing="false" onAction="#toggleTrackInstances" prefHeight="35.0" prefWidth="99.0" text="Off">
+                  <tooltip>
+                     <Tooltip text="Select &quot;On&quot; to track individual instances of the item." />
+                  </tooltip></ToggleButton>
+                    <ToggleButton fx:id="cstmFieldToggle" mnemonicParsing="false" onAction="#toggleCustomFields" prefHeight="35.0" prefWidth="99.0" text="Off" GridPane.columnIndex="1">
+                  <tooltip>
+                     <Tooltip text="Select &quot;On&quot; to add custom fields for extra information!" />
+                  </tooltip></ToggleButton>
                 </children>
             </GridPane>
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -98,7 +105,7 @@
                     <Insets right="5.0" top="20.0" />
                 </GridPane.margin>
             </DatePicker>
-            <VBox fx:id="cstmFieldSection" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <VBox fx:id="cstmFieldSection" prefHeight="200.0" prefWidth="100.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3">
                 <children>
                     <Label styleClass="fieldLbl" text="Custom Fields">
                         <VBox.margin>

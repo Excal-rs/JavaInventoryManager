@@ -166,6 +166,14 @@ public class Inventory {
                 removeInstancesStatement.setString(2, item.getName());
                 removeInstancesStatement.executeUpdate();
             } // Removes all instances of the item if there are any.
+
+            if (item.isCustomFields()) {
+                PreparedStatement removeCustomFieldValues = connection.prepareStatement("DELETE FROM customFieldValues WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
+                removeCustomFieldValues.setString(1, User.getUsername());
+                removeCustomFieldValues.setString(2, item.getName());
+                removeCustomFieldValues.executeUpdate();
+            } // Removes all custom field values associated with the item
+
             PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM items WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
             removeStatement.setString(1, User.getUsername());
             removeStatement.setString(2, item.getName());
@@ -224,8 +232,42 @@ public class Inventory {
                 }
             } // Adds new instances if quantity has changed and item had instances previously
 
+            PreparedStatement deleteCustomFieldValues = connection.prepareStatement("DELETE FROM customFieldValues " +
+                    "WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
+            deleteCustomFieldValues.setString(1, User.getUsername());
+            deleteCustomFieldValues.setString(2, item.getName());
+            deleteCustomFieldValues.executeUpdate();
+            // Removes all custom field values associated with the item by default
 
-            // TODO: Implement Later when custom fields are properly implemented
+            if (item.isCustomFields()){
+                CustomFieldValue[] customFieldValues = item.getCustomFieldValues();
+
+                PreparedStatement addCustomField = connection.prepareStatement("INSERT INTO customFields VALUES (?,?);");
+                addCustomField.setString(1, User.getUsername());
+
+                PreparedStatement addCustomFieldValues = connection.prepareStatement("INSERT INTO customFieldValues (userID, itemID, fieldTitle, fieldValue) " +
+                        "VALUES (?,?,?,?);");
+                addCustomFieldValues.setString(1, User.getUsername());
+                addCustomFieldValues.setString(2, item.getName());
+                // Prepared statements for adding custom fields and values
+
+                for (int i = 0; i < 2; i++){
+                    if (customFieldValues[i] != null && !customFields.contains(customFieldValues[i].getTitle())) {
+                        addCustomField.setString(2, customFieldValues[i].getTitle());
+                        addCustomField.executeUpdate();
+                        customFields.add(customFieldValues[i].getTitle());
+                        // Adds custom fields to the database if they don't exist
+                    }
+
+                    if (customFieldValues[i] != null) {
+                        addCustomFieldValues.setString(3, customFieldValues[i].getTitle());
+                        addCustomFieldValues.setString(4, customFieldValues[i].getValue());
+                        addCustomFieldValues.executeUpdate();
+                        // Adds custom field values to the database
+                    }
+                }
+            }
+
 
             PreparedStatement editStatement = connection.prepareStatement("UPDATE items " +
                     "SET itemDescription = ?, " +

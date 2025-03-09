@@ -18,41 +18,43 @@
     -fx-font-size: 30px;
 }
 
-/* TableView Background */
 .table-view {
     -fx-text-fill: BLACK;
-    -fx-background-color: #FAFAFA;  /* Light grey background */
-    -fx-padding: 0;                 /* No padding */
+    -fx-background-color: #FAFAFA;
+    -fx-padding: 0;
 }
 
-/* Column Header Background */
 .table-view .column-header {
-    -fx-background-color: LIGHTGREY;      /* Red background for header */
+    -fx-background-color: LIGHTGREY;
 }
 
-/* Text styling in the column header */
 .table-view .column-header-background .label {
-    -fx-font-weight: bold;          /* Bold text */
+    -fx-font-weight: bold;
 }
 
-/* Table Cell Text */
 .table-view .table-cell .label {
-    -fx-text-fill: BLACK;           /* Black text color for the cell */
-    -fx-font-size: 14px;            /* Font size */
+    -fx-text-fill: BLACK;
+    -fx-font-size: 14px;
 }
 
-/* Add padding and style for the table cell content */
 .table-view .table-cell .text {
-    -fx-text-fill: black;           /* Ensure text inside the cell is black */
-    -fx-font-size: 14px;            /* Set font size for better visibility */
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
 }
 
-/* Style for selected rows (highlighted rows) */
 .table-view .table-row-cell:selected {
-    -fx-background-color: #3399FF;  /* Highlight color for selected row */
-    -fx-text-fill: white;           /* White text for selected row */
+    -fx-background-color: #3399FF;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
 }
 
+.table-view .table-row-cell {
+    -fx-cursor: default;
+}
+
+.table-view .table-row-cell:filled {
+    -fx-cursor: hand;
+}
 
 #titleLbl {
     -fx-font-size: 30px;
@@ -66,12 +68,16 @@ Button, TextField{
     -fx-pref-height: 36;
 }
 
-Button, #addItemBtn:pressed{
+Button, #addItemBtn:pressed {
   -fx-background-color: -fx-base-colour;
   -fx-font-weight: bold;
   -fx-text-fill: WHITE;
   -fx-border-width: 2;
-  -fx-border-color: WHITE;
+  -fx-border-color: WHITE;;
+}
+
+Button {
+    -fx-cursor: hand;
 }
 
 Button:pressed, #addItemBtn {
@@ -79,11 +85,11 @@ Button:pressed, #addItemBtn {
   -fx-text-fill: -fx-base-colour;
 }
 
-Button:pressed, #addItemBtn:pressed {
+Button:pressed {
   -fx-cursor: closed-hand;
 }
 
-Button:hover, #addItemBtn:hover {
+Button:hover {
   -fx-cursor: hand;
   -fx-opacity: 0.8;
 }

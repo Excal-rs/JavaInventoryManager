@@ -208,10 +208,18 @@ public class NewItemController extends DefaultController implements Initializabl
             cstmFieldTitle2.valueProperty().addListener((observable, oldValue, newValue) -> {
                 cstmField2.setDisable(newValue.isEmpty());
                 cstmField2.setText("");
+                if (newValue.equals(cstmFieldTitle1.getValue())) {
+                    errorLbl.setText("You cannot use duplicate fields for custom field titles.");
+                    cstmFieldTitle2.setValue("");
+                }
             }); // Enables the second custom field value when the second custom field title is selected
 
         } else {
             cstmFieldToggle.setText("Off");
+            cstmFieldTitle1.setValue(null);
+            cstmFieldTitle2.setValue(null);
+            cstmField1.setText("");
+            cstmField2.setText("");
             cstmFieldSection.setVisible(false);
         }
     }

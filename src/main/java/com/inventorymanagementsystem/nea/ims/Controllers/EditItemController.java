@@ -105,15 +105,36 @@ public class EditItemController extends DefaultController implements Initializab
             quantValueFactory.setMin(quantity);
         }
         // Updates the minimum value to be the current quantity, this is so that instances which may contain important information are not deleted.
+
+        if (editedItem.isCustomFields()) {
+            toggleCustomFields(null);
+            cstmFieldSection.setVisible(true);
+
+            CustomFieldValue[] customFields = editedItem.getCustomFieldValues();
+            if (customFields[0] != null){
+                cstmFieldTitle1.setValue(customFields[0].getTitle());
+                cstmField1.setText(customFields[0].getValue());
+            }
+            if (customFields[1] != null) {
+                cstmFieldTitle2.setValue(customFields[1].getTitle());
+                cstmField2.setText(customFields[1].getValue());
+            }
+        }
     } // This will be used when the edit item form is opened, this is so that an item can be passed to it and prepopulate the form.
 
 
     // Toggle Actions --------------------------------------------------------------------------------------------------
     public void toggleTrackInstances(ActionEvent event) {
+        SpinnerValueFactory.IntegerSpinnerValueFactory quantValueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) quantSpinner.getValueFactory();
         if (instanceToggle.isSelected()) {
             instanceToggle.setText("On");
+            int quantity = editedItem.getQuantity();
+            quantValueFactory.setMin(quantity);
+            // Updates the minimum value to be the current quantity, this is so that instances which may contain important information are not deleted.
         } else {
             instanceToggle.setText("Off");
+            quantValueFactory.setMin(0);
+            // Sets the minimum value back to 0
         }
     }
 
@@ -154,10 +175,18 @@ public class EditItemController extends DefaultController implements Initializab
             cstmFieldTitle2.valueProperty().addListener((observable, oldValue, newValue) -> {
                 cstmField2.setDisable(newValue.isEmpty());
                 cstmField2.setText("");
+                if (newValue.equals(cstmFieldTitle1.getValue())) {
+                    errorLbl.setText("You cannot use duplicate fields for custom field titles.");
+                    cstmFieldTitle2.setValue("");
+                }
             }); // Enables the second custom field value when the second custom field title is selected
 
         } else {
             cstmFieldToggle.setText("Off");
+            cstmFieldTitle1.setValue(null);
+            cstmFieldTitle2.setValue(null);
+            cstmField1.setText("");
+            cstmField2.setText("");
             cstmFieldSection.setVisible(false);
         }
     }
