@@ -39,8 +39,8 @@ public class NewInstanceController extends DefaultController implements Submitta
     @Override
     public void submit(ActionEvent event) {
         String instanceID = nameField.getText();
-        String notes = notesArea.getText();
-        String location = locationField.getText();
+        String notes = notesArea.getText().isEmpty() ? "N/A" : notesArea.getText();
+        String location = locationField.getText().isEmpty()? "N/A" : locationField.getText();
 
         ValidationResult notesCheck = Validator.general(notes);
         ValidationResult locationCheck = Validator.general(location);

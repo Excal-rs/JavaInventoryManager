@@ -39,33 +39,34 @@ public class LogInController extends DefaultController {
             }
         } else {
             String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-            Connection connection = DriverManager.getConnection(url);
-            // Sets up SQL connection
+            try (Connection connection = DriverManager.getConnection(url)){
+                // Sets up SQL connection
+                PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
+                getStatement.setString(1, username);
+                ResultSet results = getStatement.executeQuery();
+                // Performs query
 
-            PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
-            getStatement.setString(1, username);
-            ResultSet results = getStatement.executeQuery();
-            // Performs query
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+                // Hashes given password
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            // Hashes given password
+                if (results.next()) {
+                    byte[] actualHash = results.getBytes("hashedPassword");
+                    if (!Arrays.equals(hash, actualHash)) {
+                        errorLbl.setText("Incorrect username or password!");
+                        connection.close();
+                        return;
+                    }
+                    User.setCurrentUser(results.getString("username"));
+                    successPopup("Login Successful", User.getUsername());
+                    switchToScene(event, "dashboard.fxml", new String[]{"dashboard.css"}, "IMS - Dashboard", 1280, 800);
 
-            if (results.next()) {
-                byte[] actualHash = results.getBytes("hashedPassword");
-                if (!Arrays.equals(hash, actualHash)) {
-                    errorLbl.setText("Incorrect username or password!");
-                    connection.close();
-                    return;
+                } else {
+                    errorLbl.setText("User does not exist!");
                 }
-                User.setCurrentUser(results.getString("username"));
-                successPopup("Login Successful", User.getUsername());
-                switchToScene(event, "dashboard.fxml", new String[]{"dashboard.css"}, "IMS - Dashboard", 1280, 800);
-
-            } else {
-                errorLbl.setText("User does not exist!");
+            } catch (SQLException e) {
+                errorLbl.setText("Error connecting to database!");
             }
-            connection.close();
         }
     }
 

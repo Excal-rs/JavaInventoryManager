@@ -50,32 +50,6 @@ public class Item {
         updateInstances();
     }
 
-    // TEMPORARY CONTRUCTORS:
-    public Item(String name, String description, boolean trackInstances,
-                boolean customFields, int purchasePrice, long purchaseDate, int quantity) {
-        this.name = name;
-        this.description = description;
-        this.trackInstances = trackInstances;
-        this.customFields = customFields;
-        this.purchasePrice = (double) purchasePrice / 100.0;
-        this.purchaseDate = unixToDate(purchaseDate);
-        // Converts unix time to a formatted string
-        this.quantity = quantity;
-
-        updateInstances();
-    }
-
-    public Item(String name, String description, boolean trackInstances, boolean customFields, double purchasePrice, LocalDate purchaseDate, int quantity) {
-        this.name = name;
-        this.description = description;
-        this.trackInstances = trackInstances;
-        this.customFields = customFields;
-        this.purchasePrice = purchasePrice;
-        this.purchaseDate = purchaseDate;
-        this.quantity = quantity;
-
-        updateInstances();
-    }
 
     // Used when copying items;
     public Item(Item item) {
@@ -110,9 +84,8 @@ public class Item {
             instances = null;
             // Check if track instances is true
         }
-        try {
-            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-            Connection connection = DriverManager.getConnection(url);
+        String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+        try (Connection connection = DriverManager.getConnection(url)){
             // Sets up SQL connection
 
             PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM itemInstances " +
@@ -131,7 +104,6 @@ public class Item {
                 instances.put(results.getInt("instanceID"), newInstance);
             } // Copies results of query into a hashmap of instances so it can stay even after connection is closed
 
-            connection.close();
             // Performs query and returns results
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -143,9 +115,8 @@ public class Item {
             return new ValidationResult(false, "Item set to not track instances!");
             // Check if track instances is true
         }
-        try {
-            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-            Connection connection = DriverManager.getConnection(url);
+        String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+        try (Connection connection = DriverManager.getConnection(url)){
             // Sets up SQL connection
 
             PreparedStatement getStatement = connection.prepareStatement("SELECT COUNT(*) FROM itemInstances WHERE LOWER(userID) = LOWER(?) " +
@@ -184,9 +155,8 @@ public class Item {
         if (!trackInstances) {
             return new ValidationResult(false, "Item set to not track instances!");
         }
-        try {
-            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-            Connection connection = DriverManager.getConnection(url);
+        String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+        try (Connection connection = DriverManager.getConnection(url)){
             // Sets up SQL connection
 
             PreparedStatement updateStatement = connection.prepareStatement("DELETE FROM itemInstances " +
@@ -216,9 +186,8 @@ public class Item {
         if (!trackInstances) {
             return new ValidationResult(false, "Item set to not track instances!");
         }
-        try {
-            String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-            Connection connection = DriverManager.getConnection(url);
+        String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
+        try (Connection connection = DriverManager.getConnection(url)){
             // Sets up SQL connection
 
             PreparedStatement updateStatement = connection.prepareStatement("UPDATE itemInstances " +

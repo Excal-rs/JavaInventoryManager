@@ -7,24 +7,28 @@ public class User {
     private static String name;
 
 
-    public static ValidationResult setCurrentUser(String username) throws SQLException {
+    public static ValidationResult setCurrentUser(String username) {
         String url = "jdbc:sqlite:src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database";
-        Connection connection = DriverManager.getConnection(url);
-        // Sets up SQL connection
 
-        PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
-        getStatement.setString(1, username);
-        ResultSet results = getStatement.executeQuery();
-        // Performs query
+        try (Connection connection = DriverManager.getConnection(url)) {
+            // Sets up SQL connection
 
-        if (results.next()) {
-            name = results.getString("name");
-            User.username = results.getString("username");
-            connection.close();
-            return new ValidationResult(true);
-        } else {
-            connection.close();
-            return new ValidationResult(false, "No such user exists!");
+            PreparedStatement getStatement = connection.prepareStatement("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
+            getStatement.setString(1, username);
+            ResultSet results = getStatement.executeQuery();
+            // Performs query
+
+            if (results.next()) {
+                name = results.getString("name");
+                User.username = results.getString("username");
+                connection.close();
+                return new ValidationResult(true);
+            } else {
+                connection.close();
+                return new ValidationResult(false, "No such user exists!");
+            }
+        } catch (SQLException e) {
+            return new ValidationResult(false, "Error connecting to database!");
         }
     }
 

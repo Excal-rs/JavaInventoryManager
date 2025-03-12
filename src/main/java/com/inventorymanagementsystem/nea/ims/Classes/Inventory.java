@@ -158,8 +158,7 @@ public class Inventory {
         if (items.get(item.getName().toLowerCase()) == null) {
             return new ValidationResult(false, "Item does not exist!");
         }
-        try {
-            Connection connection = DriverManager.getConnection(url);
+        try (Connection connection = DriverManager.getConnection(url)){
             if (item.isTrackInstances()) {
                 PreparedStatement removeInstancesStatement = connection.prepareStatement("DELETE FROM itemInstances WHERE LOWER(userID) = LOWER(?) AND LOWER(itemID) = LOWER(?);");
                 removeInstancesStatement.setString(1, User.getUsername());
@@ -194,8 +193,7 @@ public class Inventory {
         if (items.get(item.getName().toLowerCase()) == null) {
             return new ValidationResult(false, "Item does not exist");
         }
-        try {
-            Connection connection = DriverManager.getConnection(url);
+        try (Connection connection = DriverManager.getConnection(url);){
             Item oldItem = items.get(item.getName().toLowerCase());
 
             if (oldItem.isTrackInstances() ^ item.isTrackInstances()) {
