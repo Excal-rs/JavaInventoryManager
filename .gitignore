@@ -1,0 +1,4 @@
+# Ignore SQLite database files
+src/main/resources/com/inventorymanagementsystem/nea/ims/SQLdb/IMS_database
+*.db
+*.sqlite
